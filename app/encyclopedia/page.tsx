@@ -66,7 +66,7 @@ export default function Encyclopedia() {
   return (
     <div className="min-h-screen bg-[#f4faf7] font-sans">
       <div style={{ display: 'grid', gridTemplateColumns: '260px 1fr', minHeight: '100vh' }}>
-        <Sidebar active="Encyclopedia" />
+        <Sidebar active="Encyclopedia" isPro={isPro} />
         <div>
       <div className="bg-[#0a2e22] px-6 md:px-12 pt-12 pb-14 text-center">
         <div className="inline-flex items-center gap-2 bg-[#1D9E7540] text-[#5DCAA5] text-sm px-4 py-2 rounded-full mb-4">

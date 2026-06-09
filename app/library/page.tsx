@@ -388,7 +388,7 @@ export default function Library() {
   return (
     <div className="min-h-screen bg-[#f4faf7] font-sans">
       <div style={{ display: 'grid', gridTemplateColumns: '260px 1fr', minHeight: '100vh' }}>
-        <Sidebar active="Resource library" />
+        <Sidebar active="Resource library" isPro={isPro} />
         <div>
 
       {checkingAccess ? (

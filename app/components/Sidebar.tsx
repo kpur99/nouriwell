@@ -3,9 +3,10 @@ import Link from 'next/link'
 
 interface SidebarProps {
   active: string
+  isPro?: boolean
 }
 
-export default function Sidebar({ active }: SidebarProps) {
+export default function Sidebar({ active, isPro = false }: SidebarProps) {
   const item = (label: string, href: string, icon: React.ReactNode, badge?: string, badgeType?: string, locked?: boolean) => (
     <Link href={href} style={{ textDecoration: 'none' }}>
       <div style={{
@@ -76,6 +77,7 @@ export default function Sidebar({ active }: SidebarProps) {
         {item('My profile', '/onboarding',
           <svg viewBox="0 0 24 24" fill="none" width="18" height="18"><circle cx="12" cy="8" r="4" stroke="currentColor" strokeWidth="1.8"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/></svg>
         )}
+        {!isPro && (
         <div style={{ background: '#1e3d2e', borderRadius: 14, padding: 16, margin: '8px 4px 0' }}>
           <h4 style={{ fontSize: 13, fontWeight: 500, color: '#fff', marginBottom: 4 }}>Unlock Pro</h4>
           <p style={{ fontSize: 11, color: '#8aad96', lineHeight: 1.5, marginBottom: 12 }}>Cycle syncing, healing recipes, resource library and more.</p>
@@ -95,6 +97,7 @@ export default function Sidebar({ active }: SidebarProps) {
             Upgrade — $12/mo
           </button>
         </div>
+        )}
       </div>
     </aside>
   )

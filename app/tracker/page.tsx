@@ -1,7 +1,8 @@
 'use client'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { SupplementIcon } from '../components/NouriIcons'
 import Sidebar from '../components/Sidebar'
+import { getUserAccess } from '../../lib/supabase'
 
 interface Supplement {
   id: string
@@ -14,6 +15,7 @@ interface Supplement {
 }
 
 export default function Tracker() {
+  const [isPro, setIsPro] = useState(false)
   const [supplements, setSupplements] = useState<Supplement[]>([
     { id: '1', name: 'Magnesium glycinate', dose: '300mg', frequency: 'daily', time: 'evening', taken: false, notes: '' },
     { id: '2', name: 'Vitamin D3', dose: '2000 IU', frequency: 'daily', time: 'morning', taken: true, notes: '' },
@@ -23,6 +25,14 @@ export default function Tracker() {
   const [newSupp, setNewSupp] = useState({ name: '', dose: '', frequency: 'daily', time: 'morning' })
   const [checkLoading, setCheckLoading] = useState(false)
   const [checkResult, setCheckResult] = useState('')
+
+  useEffect(() => {
+    async function checkAccess() {
+      const { isPro } = await getUserAccess()
+      setIsPro(isPro)
+    }
+    checkAccess()
+  }, [])
 
   function toggleTaken(id: string) {
     setSupplements(s => s.map(x => x.id === id ? { ...x, taken: !x.taken } : x))
@@ -61,7 +71,7 @@ export default function Tracker() {
   return (
     <div className="min-h-screen bg-[#f4faf7] font-sans">
       <div style={{ display: 'grid', gridTemplateColumns: '260px 1fr', minHeight: '100vh' }}>
-        <Sidebar active="Supplement tracker" />
+        <Sidebar active="Supplement tracker" isPro={isPro} />
         <div>
       <div className="bg-[#0a2e22] px-6 md:px-12 pt-12 pb-14 text-center">
         <div className="inline-flex items-center gap-2 bg-[#1D9E7540] text-[#5DCAA5] text-sm px-4 py-2 rounded-full mb-4">

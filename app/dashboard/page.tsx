@@ -1,7 +1,7 @@
 'use client'
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
-import { supabase } from '../../lib/supabase'
+import { supabase, getUserAccess } from '../../lib/supabase'
 import {
   HeadacheIcon, StomachAcheIcon, AnxietyIcon, BrainFogIcon,
   PoorSleepIcon, LowEnergyIcon, MusclePainIcon, BloatingIcon,
@@ -79,10 +79,23 @@ export default function Dashboard() {
   const [loading, setLoading] = useState(false)
   const [results, setResults] = useState<Results | null>(null)
   const [error, setError] = useState('')
+  const [isPro, setIsPro] = useState(false)
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search)
+    if (params.get('upgraded') === 'true') {
+      // Refresh the page to reload Pro status after a short delay
+      setTimeout(() => {
+        window.location.href = '/dashboard'
+      }, 2000)
+    }
+  }, [])
 
   useEffect(() => {
     async function loadProfile() {
       const { data: { user } } = await supabase.auth.getUser()
+      const { isPro: proStatus } = await getUserAccess()
+      setIsPro(proStatus)
       if (user) {
         const { data } = await supabase.from('profiles').select('*').eq('id', user.id).single()
         if (data) setProfile(data)
@@ -147,7 +160,7 @@ export default function Dashboard() {
 
       <div style={{ display: 'grid', gridTemplateColumns: '260px 1fr', minHeight: 'calc(100vh - 64px)' }}>
 
-        <Sidebar active="Remedy finder" />
+        <Sidebar active="Remedy finder" isPro={isPro} />
 
         {/* Main content */}
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 300px', alignItems: 'start' }}>

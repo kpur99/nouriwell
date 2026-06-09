@@ -56,15 +56,18 @@ export default function Cycle() {
   return (
     <div className="min-h-screen bg-[#f4faf7] font-sans">
       <div style={{ display: 'grid', gridTemplateColumns: '260px 1fr', minHeight: '100vh' }}>
-        <Sidebar active="Cycle syncing" />
+        <Sidebar active="Cycle syncing" isPro={isPro} />
         <div>
+        {checkingAccess ? (
+          <div style={{ textAlign: 'center', padding: '80px 0', color: '#8aad96' }}>Checking access...</div>
+        ) : isPro ? (
+          <>
       <div className="bg-[#0a2e22] px-6 md:px-12 pt-12 pb-14 text-center">
         <div className="inline-flex items-center gap-2 bg-[#1D9E7540] text-[#5DCAA5] text-sm px-4 py-2 rounded-full mb-4">
           🌸 Cycle syncing
         </div>
         <h1 className="text-4xl md:text-5xl font-medium text-white mb-4">Nourish your body <span className="text-[#5DCAA5]">every phase</span></h1>
         <p className="text-lg text-[#7aaa94] max-w-xl mx-auto">Get phase-specific remedies, foods, and practices tailored to where you are in your cycle.</p>
-        {!isPro && <div className="inline-flex items-center gap-2 bg-[#EEEDFE] text-[#3C3489] text-xs px-3 py-1.5 rounded-full mt-4">🔒 Pro feature</div>}
       </div>
 
       <div className="max-w-3xl mx-auto px-6 py-10">
@@ -176,8 +179,28 @@ export default function Cycle() {
           </div>
         )}
         </div>
+          </>
+        ) : (
+          <div style={{ textAlign: 'center', padding: '80px 32px' }}>
+            <div style={{ fontSize: 48, marginBottom: 16 }}>🔒</div>
+            <h3 style={{ fontSize: 22, fontWeight: 500, color: '#1a3328', marginBottom: 8 }}>Pro feature</h3>
+            <p style={{ fontSize: 14, color: '#5a7a6a', marginBottom: 24, maxWidth: 400, margin: '0 auto 24px' }}>
+              Upgrade to Root Pro to unlock cycle syncing — phase-specific remedies, foods, and practices.
+            </p>
+            <button
+              onClick={async () => {
+                const res = await fetch('/api/checkout', { method: 'POST' })
+                const data = await res.json()
+                if (data.url) window.location.href = data.url
+              }}
+              style={{ background: '#3d8c6a', color: '#fff', border: 'none', borderRadius: 12, padding: '14px 32px', fontSize: 15, fontWeight: 500, cursor: 'pointer' }}
+            >
+              Upgrade to Pro — $12/mo
+            </button>
+          </div>
+        )}
+        </div>
       </div>
-    </div>
     </div>
   )
 }
