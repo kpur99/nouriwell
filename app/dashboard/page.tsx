@@ -79,7 +79,7 @@ export default function Dashboard() {
   const [loading, setLoading] = useState(false)
   const [results, setResults] = useState<Results | null>(null)
   const [error, setError] = useState('')
-  const [isPro, setIsPro] = useState(false)
+  const [isPro, setIsPro] = useState(true)
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search)
@@ -147,6 +147,18 @@ export default function Dashboard() {
           </span>
         </Link>
         <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginLeft: 'auto' }}>
+          {!isPro && (
+            <button
+              onClick={async () => {
+                const res = await fetch('/api/checkout', { method: 'POST' })
+                const data = await res.json()
+                if (data.url) window.location.href = data.url
+              }}
+              style={{ background: '#1e3d2e', color: '#fff', border: 'none', borderRadius: 20, padding: '8px 18px', fontSize: 13, fontWeight: 500, cursor: 'pointer', fontFamily: 'inherit' }}
+            >
+              ✦ Upgrade to Pro
+            </button>
+          )}
           {profile?.name && (
             <span style={{ fontSize: 13, color: '#8aad96' }}>
               Good morning, <strong style={{ color: '#1a3328', fontWeight: 500 }}>{profile.name}</strong>

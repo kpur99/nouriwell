@@ -18,8 +18,7 @@ interface Recipe {
 }
 
 export default function Recipes() {
-  const [isPro, setIsPro] = useState(false)
-  const [checkingAccess, setCheckingAccess] = useState(true)
+  const [isPro, setIsPro] = useState(true)
   const [goal, setGoal] = useState('')
   const [diet, setDiet] = useState('No restrictions')
   const [ingredients, setIngredients] = useState('')
@@ -31,7 +30,6 @@ export default function Recipes() {
     async function checkAccess() {
       const { isPro } = await getUserAccess()
       setIsPro(isPro)
-      setCheckingAccess(false)
     }
     checkAccess()
   }, [])
@@ -59,9 +57,7 @@ export default function Recipes() {
       <div style={{ display: 'grid', gridTemplateColumns: '260px 1fr', minHeight: '100vh' }}>
         <Sidebar active="Healing recipes" isPro={isPro} />
         <div>
-        {checkingAccess ? (
-          <div style={{ textAlign: 'center', padding: '80px 0', color: '#8aad96' }}>Checking access...</div>
-        ) : isPro ? (
+        {isPro ? (
           <>
       <div className="bg-[#0a2e22] px-6 md:px-12 pt-12 pb-14 text-center">
         <div className="inline-flex items-center gap-2 bg-[#1D9E7540] text-[#5DCAA5] text-sm px-4 py-2 rounded-full mb-4">
@@ -164,22 +160,35 @@ export default function Recipes() {
       </div>
           </>
         ) : (
-          <div style={{ textAlign: 'center', padding: '80px 32px' }}>
-            <div style={{ fontSize: 48, marginBottom: 16 }}>🔒</div>
-            <h3 style={{ fontSize: 22, fontWeight: 500, color: '#1a3328', marginBottom: 8 }}>Pro feature</h3>
-            <p style={{ fontSize: 14, color: '#5a7a6a', marginBottom: 24, maxWidth: 400, margin: '0 auto 24px' }}>
-              Upgrade to Root Pro to unlock healing recipes — AI-generated anti-inflammatory meals built around your goals.
+          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', minHeight: 'calc(100vh - 64px)', padding: '0 32px', textAlign: 'center' }}>
+            <div style={{ width: 64, height: 64, borderRadius: 20, background: '#e8f0ea', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 24 }}>
+              <svg width="28" height="28" viewBox="0 0 24 24" fill="none"><path d="M18 11H6a2 2 0 00-2 2v6a2 2 0 002 2h12a2 2 0 002-2v-6a2 2 0 00-2-2z" stroke="#2a5c45" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/><path d="M8 11V7a4 4 0 018 0v4" stroke="#2a5c45" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+            </div>
+            <h2 style={{ fontSize: 28, fontWeight: 500, color: '#1a3328', marginBottom: 12 }}>This is a Pro feature</h2>
+            <p style={{ fontSize: 15, color: '#5a7a6a', maxWidth: 420, lineHeight: 1.7, marginBottom: 32 }}>
+              Upgrade to Nouriwell Root Pro to unlock cycle syncing, healing recipes, resource library and unlimited AI remedies.
             </p>
+            <div style={{ background: '#faf8f3', border: '0.5px solid #e0d8c8', borderRadius: 20, padding: '24px 32px', marginBottom: 32, maxWidth: 320, width: '100%' }}>
+              <div style={{ fontSize: 13, color: '#8aad96', marginBottom: 4 }}>Root Pro</div>
+              <div style={{ fontSize: 36, fontWeight: 500, color: '#1a3328', marginBottom: 16 }}>$12 <span style={{ fontSize: 14, fontWeight: 400, color: '#8aad96' }}>/ month</span></div>
+              {['Unlimited AI remedies', 'Cycle syncing', 'Healing recipes', 'Resource library', 'Full encyclopedia'].map(f => (
+                <div key={f} style={{ fontSize: 13, color: '#5a7a6a', padding: '4px 0', display: 'flex', alignItems: 'center', gap: 8 }}>
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M5 12L10 17L19 8" stroke="#3d8c6a" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+                  {f}
+                </div>
+              ))}
+            </div>
             <button
               onClick={async () => {
                 const res = await fetch('/api/checkout', { method: 'POST' })
                 const data = await res.json()
                 if (data.url) window.location.href = data.url
               }}
-              style={{ background: '#3d8c6a', color: '#fff', border: 'none', borderRadius: 12, padding: '14px 32px', fontSize: 15, fontWeight: 500, cursor: 'pointer' }}
+              style={{ background: '#2a5c45', color: '#fff', border: 'none', borderRadius: 14, padding: '16px 40px', fontSize: 16, fontWeight: 500, cursor: 'pointer', fontFamily: 'inherit' }}
             >
               Upgrade to Pro — $12/mo
             </button>
+            <p style={{ fontSize: 12, color: '#8aad96', marginTop: 12 }}>Cancel anytime</p>
           </div>
         )}
         </div>

@@ -1,5 +1,5 @@
 'use client'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { supabase } from '../../lib/supabase'
 import { useRouter } from 'next/navigation'
 
@@ -21,6 +21,16 @@ export default function Onboarding() {
   const [allergyInput, setAllergyInput] = useState('')
   const [medInput, setMedInput] = useState('')
   const [loading, setLoading] = useState(false)
+
+  useEffect(() => {
+    async function checkSession() {
+      const { data: { session } } = await supabase.auth.getSession()
+      if (!session) {
+        router.push('/login')
+      }
+    }
+    checkSession()
+  }, [])
 
   const pct = Math.round(((step + 1) / STEPS) * 100)
 
@@ -46,10 +56,17 @@ export default function Onboarding() {
   async function finish() {
     setLoading(true)
     try {
-      const { data: { user } } = await supabase.auth.getUser()
-      if (user) {
-        await supabase.from('profiles').upsert({ id: user.id, ...answers })
+      const { data: { session } } = await supabase.auth.getSession()
+      if (!session) {
+        router.push('/login')
+        setLoading(false)
+        return
       }
+      const user = session.user
+      await supabase.from('profiles').upsert({
+        id: user.id,
+        ...answers
+      })
       router.push('/dashboard')
     } catch (e) {
       console.error(e)
