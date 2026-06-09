@@ -81,9 +81,14 @@ export default function Sidebar({ active }: SidebarProps) {
           <p style={{ fontSize: 11, color: '#8aad96', lineHeight: 1.5, marginBottom: 12 }}>Cycle syncing, healing recipes, resource library and more.</p>
           <button
             onClick={async () => {
-              const res = await fetch('/api/checkout', { method: 'POST' })
-              const data = await res.json()
-              if (data.url) window.location.href = data.url
+              try {
+                const res = await fetch('/api/checkout', { method: 'POST' })
+                const data = await res.json()
+                if (data.url) window.location.href = data.url
+                else alert('Something went wrong. Please try again.')
+              } catch (e) {
+                alert('Something went wrong. Please try again.')
+              }
             }}
             style={{ width: '100%', background: '#3d8c6a', color: '#fff', border: 'none', borderRadius: 20, padding: 8, fontSize: 12, fontWeight: 500, cursor: 'pointer', fontFamily: 'inherit' }}
           >
