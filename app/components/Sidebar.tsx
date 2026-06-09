@@ -1,3 +1,4 @@
+'use client'
 import Link from 'next/link'
 
 interface SidebarProps {
@@ -78,7 +79,14 @@ export default function Sidebar({ active }: SidebarProps) {
         <div style={{ background: '#1e3d2e', borderRadius: 14, padding: 16, margin: '8px 4px 0' }}>
           <h4 style={{ fontSize: 13, fontWeight: 500, color: '#fff', marginBottom: 4 }}>Unlock Pro</h4>
           <p style={{ fontSize: 11, color: '#8aad96', lineHeight: 1.5, marginBottom: 12 }}>Cycle syncing, healing recipes, resource library and more.</p>
-          <button style={{ width: '100%', background: '#3d8c6a', color: '#fff', border: 'none', borderRadius: 20, padding: 8, fontSize: 12, fontWeight: 500, cursor: 'pointer', fontFamily: 'inherit' }}>
+          <button
+            onClick={async () => {
+              const res = await fetch('/api/checkout', { method: 'POST' })
+              const data = await res.json()
+              if (data.url) window.location.href = data.url
+            }}
+            style={{ width: '100%', background: '#3d8c6a', color: '#fff', border: 'none', borderRadius: 20, padding: 8, fontSize: 12, fontWeight: 500, cursor: 'pointer', fontFamily: 'inherit' }}
+          >
             Upgrade — $12/mo
           </button>
         </div>
