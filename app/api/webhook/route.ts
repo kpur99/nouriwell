@@ -4,48 +4,49 @@ import { createClient } from '@supabase/supabase-js'
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!)
 
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-)
-
 export async function POST(req: NextRequest) {
+  console.log('Webhook received')
+  
   const body = await req.text()
-  const sig = req.headers.get('stripe-signature')!
+  const sig = req.headers.get('stripe-signature')
+
+  if (!sig) {
+    console.log('No signature found')
+    return new Response('No signature', { status: 400 })
+  }
 
   let event
   try {
     event = stripe.webhooks.constructEvent(body, sig, process.env.STRIPE_WEBHOOK_SECRET!)
+    console.log('Event type:', event.type)
   } catch (err) {
+    console.log('Webhook signature error:', err)
     return new Response(`Webhook error: ${err}`, { status: 400 })
   }
 
   if (event.type === 'checkout.session.completed') {
     const session = event.data.object as Stripe.Checkout.Session
     const userId = session.metadata?.user_id
+    console.log('User ID from metadata:', userId)
 
-    if (userId) {
-      await supabase
-        .from('profiles')
-        .update({ is_beta: true })
-        .eq('id', userId)
+    if (!userId) {
+      console.log('No user_id in metadata')
+      return new Response(JSON.stringify({ received: true }), { status: 200 })
     }
+
+    const supabase = createClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.SUPABASE_SERVICE_ROLE_KEY!
+    )
+
+    console.log('Updating profile for user:', userId)
+    const { data, error } = await supabase
+      .from('profiles')
+      .update({ is_beta: true })
+      .eq('id', userId)
+
+    console.log('Update result:', data, 'Error:', error)
   }
 
-  if (event.type === 'customer.subscription.deleted') {
-    const subscription = event.data.object as Stripe.Subscription
-    const customerId = subscription.customer as string
-
-    const customer = await stripe.customers.retrieve(customerId) as Stripe.Customer
-    const email = customer.email
-
-    if (email) {
-      await supabase
-        .from('profiles')
-        .update({ is_beta: false })
-        .eq('id', (await supabase.from('profiles').select('id').eq('name', email).single()).data?.id)
-    }
-  }
-
-  return new Response(JSON.stringify({ received: true }))
+  return new Response(JSON.stringify({ received: true }), { status: 200 })
 }
