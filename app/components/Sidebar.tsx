@@ -1,13 +1,22 @@
 'use client'
 import Link from 'next/link'
-import { CycleSyncingIcon } from './NouriIcons'
 
 interface SidebarProps {
   active: string
   isPro?: boolean
 }
 
-const hormoneBalancingIcon = <CycleSyncingIcon size={18} color="currentColor" />
+const hormoneBalancingIcon = (
+  <svg viewBox="0 0 24 24" fill="none" width="18" height="18"><path d="M4 12a8 8 0 018-8" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/><path d="M20 12a8 8 0 01-8 8" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/><path d="M12 4V2M12 4L10 6M12 4L14 6" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/><circle cx="12" cy="12" r="2" stroke="currentColor" strokeWidth="1.6"/></svg>
+)
+
+const healingRecipesIcon = (
+  <svg viewBox="0 0 24 24" fill="none" width="18" height="18"><path d="M5 10C5 14 8 17 12 17C16 17 19 14 19 10" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/><path d="M3 10h18" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/><path d="M9 20h6" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/><path d="M12 20v-3" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round"/><path d="M12 7V5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/><path d="M12 5C10 5 9 3.5 9 2C11 2 12 3.5 12 5Z" stroke="currentColor" strokeWidth="1.6" strokeLinejoin="round"/><path d="M12 5C14 5 15 3.5 15 2C13 2 12 3.5 12 5Z" stroke="currentColor" strokeWidth="1.6" strokeLinejoin="round"/></svg>
+)
+
+const resourceLibraryIcon = (
+  <svg viewBox="0 0 24 24" fill="none" width="18" height="18"><path d="M4 19V6a2 2 0 012-2h14v13" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/><path d="M4 19a2 2 0 002 2h14" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/><path d="M4 19a2 2 0 012-2h14" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/><path d="M15 4v7l-2-1.5L11 11V4" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/></svg>
+)
 
 export default function Sidebar({ active, isPro = false }: SidebarProps) {
   const item = (label: string, href: string, icon: React.ReactNode, badge?: string, badgeType?: string) => (
@@ -73,22 +82,14 @@ export default function Sidebar({ active, isPro = false }: SidebarProps) {
       {isPro ? (
         <>
           {item('Hormone balancing', '/cycle', hormoneBalancingIcon)}
-          {item('Healing recipes', '/recipes',
-            <svg viewBox="0 0 24 24" fill="none" width="18" height="18"><path d="M5 10C5 14 8 17 12 17C16 17 19 14 19 10" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/><path d="M3 10h18" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/><path d="M12 20v-3" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round"/></svg>
-          )}
-          {item('Resource library', '/library',
-            <svg viewBox="0 0 24 24" fill="none" width="18" height="18"><path d="M4 19V6a2 2 0 012-2h14v13" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/><path d="M4 19a2 2 0 002 2h14" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/><path d="M4 19a2 2 0 012-2h14" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/></svg>
-          )}
+          {item('Healing recipes', '/recipes', healingRecipesIcon)}
+          {item('Resource library', '/library', resourceLibraryIcon)}
         </>
       ) : (
         <>
           {lockedItem('Hormone balancing', '/cycle', hormoneBalancingIcon)}
-          {lockedItem('Healing recipes', '/recipes',
-            <svg viewBox="0 0 24 24" fill="none" width="18" height="18"><path d="M5 10C5 14 8 17 12 17C16 17 19 14 19 10" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/><path d="M3 10h18" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/><path d="M12 20v-3" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round"/></svg>
-          )}
-          {lockedItem('Resource library', '/library',
-            <svg viewBox="0 0 24 24" fill="none" width="18" height="18"><path d="M4 19V6a2 2 0 012-2h14v13" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/><path d="M4 19a2 2 0 002 2h14" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/><path d="M4 19a2 2 0 012-2h14" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/></svg>
-          )}
+          {lockedItem('Healing recipes', '/recipes', healingRecipesIcon)}
+          {lockedItem('Resource library', '/library', resourceLibraryIcon)}
         </>
       )}
 
