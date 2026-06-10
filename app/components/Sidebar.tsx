@@ -1,10 +1,13 @@
 'use client'
 import Link from 'next/link'
+import { CycleSyncingIcon } from './NouriIcons'
 
 interface SidebarProps {
   active: string
   isPro?: boolean
 }
+
+const hormoneBalancingIcon = <CycleSyncingIcon size={18} color="currentColor" />
 
 export default function Sidebar({ active, isPro = false }: SidebarProps) {
   const item = (label: string, href: string, icon: React.ReactNode, badge?: string, badgeType?: string) => (
@@ -69,9 +72,7 @@ export default function Sidebar({ active, isPro = false }: SidebarProps) {
 
       {isPro ? (
         <>
-          {item('Cycle syncing', '/cycle',
-            <svg viewBox="0 0 24 24" fill="none" width="18" height="18"><path d="M4 12a8 8 0 018-8" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/><path d="M20 12a8 8 0 01-8 8" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/><circle cx="12" cy="12" r="2" stroke="currentColor" strokeWidth="1.6"/></svg>
-          )}
+          {item('Hormone balancing', '/cycle', hormoneBalancingIcon)}
           {item('Healing recipes', '/recipes',
             <svg viewBox="0 0 24 24" fill="none" width="18" height="18"><path d="M5 10C5 14 8 17 12 17C16 17 19 14 19 10" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/><path d="M3 10h18" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/><path d="M12 20v-3" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round"/></svg>
           )}
@@ -81,9 +82,7 @@ export default function Sidebar({ active, isPro = false }: SidebarProps) {
         </>
       ) : (
         <>
-          {lockedItem('Cycle syncing', '/cycle',
-            <svg viewBox="0 0 24 24" fill="none" width="18" height="18"><path d="M4 12a8 8 0 018-8" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/><path d="M20 12a8 8 0 01-8 8" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/><circle cx="12" cy="12" r="2" stroke="currentColor" strokeWidth="1.6"/></svg>
-          )}
+          {lockedItem('Hormone balancing', '/cycle', hormoneBalancingIcon)}
           {lockedItem('Healing recipes', '/recipes',
             <svg viewBox="0 0 24 24" fill="none" width="18" height="18"><path d="M5 10C5 14 8 17 12 17C16 17 19 14 19 10" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/><path d="M3 10h18" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/><path d="M12 20v-3" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round"/></svg>
           )}

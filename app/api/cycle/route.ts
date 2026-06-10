@@ -12,9 +12,9 @@ export async function POST(req: NextRequest) {
       max_tokens: 2048,
       messages: [{
         role: 'user',
-        content: `You are a holistic women's health expert specializing in cycle syncing. 
+        content: `You are a holistic women's health expert specializing in hormone balancing. 
 User profile: ${JSON.stringify(profile)}
-Current cycle phase: ${phase}
+Current hormone phase: ${phase}
 Current symptoms: ${symptoms || 'none specified'}
 
 Respond ONLY with valid JSON, no markdown, no backticks:

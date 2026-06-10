@@ -1,6 +1,7 @@
 'use client'
 import { useState, useEffect } from 'react'
 import Sidebar from '../components/Sidebar'
+import { CycleSyncingIcon } from '../components/NouriIcons'
 import { getUserAccess } from '../../lib/supabase'
 
 const PHASES = [
@@ -54,16 +55,16 @@ export default function Cycle() {
   return (
     <div className="min-h-screen bg-[#f4faf7] font-sans">
       <div style={{ display: 'grid', gridTemplateColumns: '260px 1fr', minHeight: '100vh' }}>
-        <Sidebar active="Cycle syncing" isPro={isPro} />
+        <Sidebar active="Hormone balancing" isPro={isPro} />
         <div>
         {isPro ? (
           <>
       <div className="bg-[#0a2e22] px-6 md:px-12 pt-12 pb-14 text-center">
         <div className="inline-flex items-center gap-2 bg-[#1D9E7540] text-[#5DCAA5] text-sm px-4 py-2 rounded-full mb-4">
-          🌸 Cycle syncing
+          <CycleSyncingIcon size={16} color="#5DCAA5" /> Hormone balancing
         </div>
-        <h1 className="text-4xl md:text-5xl font-medium text-white mb-4">Nourish your body <span className="text-[#5DCAA5]">every phase</span></h1>
-        <p className="text-lg text-[#7aaa94] max-w-xl mx-auto">Get phase-specific remedies, foods, and practices tailored to where you are in your cycle.</p>
+        <h1 className="text-4xl md:text-5xl font-medium text-white mb-4">Balance your hormones <span className="text-[#5DCAA5]">every phase</span></h1>
+        <p className="text-lg text-[#7aaa94] max-w-xl mx-auto">Get phase-specific remedies, foods, and practices tailored to your hormone balancing needs.</p>
       </div>
 
       <div className="max-w-3xl mx-auto px-6 py-10">
@@ -183,12 +184,12 @@ export default function Cycle() {
             </div>
             <h2 style={{ fontSize: 28, fontWeight: 500, color: '#1a3328', marginBottom: 12 }}>This is a Pro feature</h2>
             <p style={{ fontSize: 15, color: '#5a7a6a', maxWidth: 420, lineHeight: 1.7, marginBottom: 32 }}>
-              Upgrade to Nouriwell Root Pro to unlock cycle syncing, healing recipes, resource library and unlimited AI remedies.
+              Upgrade to Nouriwell Root Pro to unlock hormone balancing, healing recipes, resource library and unlimited AI remedies.
             </p>
             <div style={{ background: '#faf8f3', border: '0.5px solid #e0d8c8', borderRadius: 20, padding: '24px 32px', marginBottom: 32, maxWidth: 320, width: '100%' }}>
               <div style={{ fontSize: 13, color: '#8aad96', marginBottom: 4 }}>Root Pro</div>
               <div style={{ fontSize: 36, fontWeight: 500, color: '#1a3328', marginBottom: 16 }}>$12 <span style={{ fontSize: 14, fontWeight: 400, color: '#8aad96' }}>/ month</span></div>
-              {['Unlimited AI remedies', 'Cycle syncing', 'Healing recipes', 'Resource library', 'Full encyclopedia'].map(f => (
+              {['Unlimited AI remedies', 'Hormone balancing', 'Healing recipes', 'Resource library', 'Full encyclopedia'].map(f => (
                 <div key={f} style={{ fontSize: 13, color: '#5a7a6a', padding: '4px 0', display: 'flex', alignItems: 'center', gap: 8 }}>
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M5 12L10 17L19 8" stroke="#3d8c6a" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
                   {f}

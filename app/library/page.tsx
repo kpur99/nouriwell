@@ -34,7 +34,7 @@ const RESOURCES = [
     author: 'Nevia Victoria',
     type: 'podcast',
     topic: 'Hormonal health',
-    description: 'Cycle syncing, hormonal balance, and nourishing your body through every phase of your cycle.',
+    description: 'Hormone balancing and nourishing your body through every phase of your hormone cycle.',
     url: 'https://podcasts.apple.com/us/podcast/the-cycle-kitchen/id1641930614',
   },
   {
@@ -475,12 +475,12 @@ export default function Library() {
           </div>
           <h2 style={{ fontSize: 28, fontWeight: 500, color: '#1a3328', marginBottom: 12 }}>This is a Pro feature</h2>
           <p style={{ fontSize: 15, color: '#5a7a6a', maxWidth: 420, lineHeight: 1.7, marginBottom: 32 }}>
-            Upgrade to Nouriwell Root Pro to unlock cycle syncing, healing recipes, resource library and unlimited AI remedies.
+            Upgrade to Nouriwell Root Pro to unlock hormone balancing, healing recipes, resource library and unlimited AI remedies.
           </p>
           <div style={{ background: '#faf8f3', border: '0.5px solid #e0d8c8', borderRadius: 20, padding: '24px 32px', marginBottom: 32, maxWidth: 320, width: '100%' }}>
             <div style={{ fontSize: 13, color: '#8aad96', marginBottom: 4 }}>Root Pro</div>
             <div style={{ fontSize: 36, fontWeight: 500, color: '#1a3328', marginBottom: 16 }}>$12 <span style={{ fontSize: 14, fontWeight: 400, color: '#8aad96' }}>/ month</span></div>
-            {['Unlimited AI remedies', 'Cycle syncing', 'Healing recipes', 'Resource library', 'Full encyclopedia'].map(f => (
+            {['Unlimited AI remedies', 'Hormone balancing', 'Healing recipes', 'Resource library', 'Full encyclopedia'].map(f => (
               <div key={f} style={{ fontSize: 13, color: '#5a7a6a', padding: '4px 0', display: 'flex', alignItems: 'center', gap: 8 }}>
                 <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M5 12L10 17L19 8" stroke="#3d8c6a" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
                 {f}

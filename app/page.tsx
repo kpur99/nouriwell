@@ -94,7 +94,7 @@ export default function Home() {
           {[
             { icon: <RemedyFinderIcon size={22} color="#a8d4be" />, title: 'AI remedy finder', badge: 'Free', desc: 'Specific oils, herbs, and supplements with exact doses for what ails you.', href: '/dashboard' },
             { icon: <SupplementTrackerIcon size={22} color="#a8d4be" />, title: 'Supplement tracker', badge: 'Free', desc: 'Log your stack, track your streak, and check for interactions with AI.', href: '/tracker' },
-            { icon: <CycleSyncingIcon size={22} color="#a8d4be" />, title: 'Cycle syncing', badge: 'Pro', desc: 'Phase-specific remedies, foods, and practices for every stage of your cycle.', href: '/cycle' },
+            { icon: <CycleSyncingIcon size={22} color="#a8d4be" />, title: 'Hormone balancing', badge: 'Pro', desc: 'Phase-specific remedies, foods, and practices for every stage of hormone balancing.', href: '/cycle' },
             { icon: <HealingRecipesIcon size={22} color="#a8d4be" />, title: 'Healing recipes', badge: 'Pro', desc: 'Anti-inflammatory meals built around your health goals and diet preferences.', href: '/recipes' },
             { icon: <EncyclopediaIcon size={22} color="#a8d4be" />, title: 'Holistic encyclopedia', badge: 'Free + Pro', desc: 'Look up any supplement, herb, or oil for uses, dosage, and safety info.', href: '/encyclopedia' },
             { icon: <ResourceLibraryIcon size={22} color="#a8d4be" />, title: 'Resource library', badge: 'Pro', desc: 'Curated podcasts, books, and videos from holistic health experts we recommend.', href: '/library' },
@@ -187,7 +187,7 @@ export default function Home() {
             {
               name: 'Root', badge: 'Pro', badgeBg: '#ede8f5', badgeColor: '#4a3589',
               price: '$12', period: '/ month', featured: true,
-              features: ['Unlimited AI remedies', 'Cycle syncing', 'Healing recipes', 'Full encyclopedia', 'Resource library', 'Weekly AI check-ins'],
+              features: ['Unlimited AI remedies', 'Hormone balancing', 'Healing recipes', 'Full encyclopedia', 'Resource library', 'Weekly AI check-ins'],
               cta: 'Start free trial', ctaBg: '#3d8c6a', ctaColor: '#fff', href: '/signup'
             },
           ].map(p => (
