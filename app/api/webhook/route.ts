@@ -44,17 +44,23 @@ export async function POST(req: NextRequest) {
     const customerId = invoice.customer as string
     console.log('invoice.payment_succeeded — customerId:', customerId)
 
-    // Get customer email from Stripe
     const customer = await stripe.customers.retrieve(customerId) as Stripe.Customer
     const email = customer.email
     console.log('Customer email:', email)
 
     if (email) {
-      const { error } = await supabase
-        .from('profiles')
-        .update({ is_beta: true })
-        .eq('id', (await supabase.auth.admin.getUserByEmail(email)).data.user?.id || '')
-      console.log('Update error:', error)
+      const { data: users, error: userError } = await supabase.auth.admin.listUsers()
+      console.log('List users error:', userError)
+      const user = users?.users?.find(u => u.email === email)
+      console.log('Found user:', user?.id)
+
+      if (user?.id) {
+        const { error } = await supabase
+          .from('profiles')
+          .update({ is_beta: true })
+          .eq('id', user.id)
+        console.log('Update error:', error)
+      }
     }
   }
 
@@ -65,11 +71,15 @@ export async function POST(req: NextRequest) {
     const email = customer.email
 
     if (email) {
-      const { error } = await supabase
-        .from('profiles')
-        .update({ is_beta: false })
-        .eq('id', (await supabase.auth.admin.getUserByEmail(email)).data.user?.id || '')
-      console.log('Cancellation update error:', error)
+      const { data: users } = await supabase.auth.admin.listUsers()
+      const user = users?.users?.find(u => u.email === email)
+
+      if (user?.id) {
+        await supabase
+          .from('profiles')
+          .update({ is_beta: false })
+          .eq('id', user.id)
+      }
     }
   }
 
