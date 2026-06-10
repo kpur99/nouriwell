@@ -167,6 +167,15 @@ export default function Dashboard() {
           <div style={{ width: 34, height: 34, borderRadius: '50%', background: '#e8f0ea', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 13, fontWeight: 600, color: '#2a5c45' }}>
             {profile?.name ? profile.name.charAt(0).toUpperCase() : 'U'}
           </div>
+          <button
+            onClick={async () => {
+              await supabase.auth.signOut()
+              window.location.href = '/'
+            }}
+            style={{ fontSize: 13, color: '#5a7a6a', padding: '7px 16px', borderRadius: 20, cursor: 'pointer', background: 'none', border: '0.5px solid #e0d8c8', fontFamily: 'inherit' }}
+          >
+            Sign out
+          </button>
         </div>
       </nav>
 

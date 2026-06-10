@@ -97,6 +97,17 @@ export default function Sidebar({ active, isPro = false }: SidebarProps) {
         {item('My profile', '/onboarding',
           <svg viewBox="0 0 24 24" fill="none" width="18" height="18"><circle cx="12" cy="8" r="4" stroke="currentColor" strokeWidth="1.8"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/></svg>
         )}
+        <button
+          onClick={async () => {
+            const { supabase } = await import('../../lib/supabase')
+            await supabase.auth.signOut()
+            window.location.href = '/'
+          }}
+          style={{ display: 'flex', alignItems: 'center', gap: 10, padding: '10px 12px', borderRadius: 12, cursor: 'pointer', fontSize: 14, color: '#5a7a6a', background: 'none', border: 'none', width: '100%', fontFamily: 'inherit' }}
+        >
+          <svg viewBox="0 0 24 24" fill="none" width="18" height="18"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/><path d="M16 17l5-5-5-5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/><path d="M21 12H9" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/></svg>
+          Sign out
+        </button>
       </div>
     </aside>
   )
