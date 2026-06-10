@@ -62,7 +62,7 @@ export default function Sidebar({ active, isPro = false }: SidebarProps) {
 
       <p style={{ fontSize: 12, fontWeight: 600, color: '#2a5c45', letterSpacing: '0.08em', textTransform: 'uppercase', padding: '4px 12px 6px' }}>Free features</p>
 
-      {item('Remedy finder', '/dashboard',
+      {item('Remedy finder', '/remedy-finder',
         <svg viewBox="0 0 24 24" fill="none" width="18" height="18"><circle cx="10" cy="10" r="6" stroke="currentColor" strokeWidth="1.8"/><path d="M14.5 14.5L20 20" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/><path d="M10 13V8" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round"/><path d="M10 10C8 10 7 8.5 7 7C9 7 10 8.5 10 10Z" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round"/><path d="M10 10C12 10 13 8.5 13 7C11 7 10 8.5 10 10Z" stroke="currentColor" strokeWidth="1.5" strokeLinejoin="round"/></svg>,
         'Free', 'free'
       )}
