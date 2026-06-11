@@ -63,10 +63,12 @@ export default function Onboarding() {
         return
       }
       const user = session.user
-      await supabase.from('profiles').upsert({
+      const { error } = await supabase.from('profiles').upsert({
         id: user.id,
         ...answers
-      })
+      }, { onConflict: 'id' })
+
+      if (error) console.error('Profile save error:', error)
       router.push('/dashboard')
     } catch (e) {
       console.error(e)
