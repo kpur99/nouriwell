@@ -435,6 +435,10 @@ export default function ProfilePage() {
                 )}
               </div>
 
+              <div style={{ borderTop: '0.5px solid #e0d8c8', padding: '16px 20px' }}>
+                <Link href="/contact" style={{ fontSize: 13, color: '#3d8c6a', textDecoration: 'none' }}>Contact us →</Link>
+              </div>
+
             </div>
 
           </div>

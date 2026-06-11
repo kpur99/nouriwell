@@ -36,6 +36,7 @@ export default function Home() {
           </div>
         )}
         <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginLeft: isMobile ? 'auto' : undefined }}>
+          <Link href="/contact" style={{ color: '#5a7a6a', textDecoration: 'none', fontSize: 14, padding: '7px 16px' }}>Contact</Link>
           {!isMobile && (
             <Link href="/login">
               <button style={{ fontSize: 14, color: '#5a7a6a', padding: '7px 16px', borderRadius: 20, cursor: 'pointer', background: 'none', border: 'none', fontFamily: 'inherit' }}>Sign in</button>
@@ -231,6 +232,7 @@ export default function Home() {
           </svg>
         </div>
         <span style={{ fontSize: 15, fontWeight: 500, color: '#fff' }}>Nouri<span style={{ color: '#7dc9a3' }}>well</span></span>
+        <Link href="/contact" style={{ color: '#8aad96', textDecoration: 'none', fontSize: 14 }}>Contact</Link>
         <span style={{ fontSize: 12, color: '#4a6a5a', marginLeft: isMobile ? 0 : 'auto', width: isMobile ? '100%' : 'auto' }}>Holistic health, naturally guided · © 2026 · Not medical advice · Always consult a healthcare provider</span>
       </div>
 
