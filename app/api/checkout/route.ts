@@ -26,6 +26,13 @@ export async function POST(req: NextRequest) {
     const { data: { user } } = await supabase.auth.getUser()
     if (!user) return new Response(JSON.stringify({ error: 'Not authenticated' }), { status: 401 })
 
+    // Check if customer already exists in Stripe
+    let customerId: string | undefined
+    const existingCustomers = await stripe.customers.list({ email: user.email, limit: 1 })
+    if (existingCustomers.data.length > 0) {
+      customerId = existingCustomers.data[0].id
+    }
+
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
       mode: 'subscription',
@@ -35,7 +42,8 @@ export async function POST(req: NextRequest) {
       }],
       success_url: `${process.env.NEXT_PUBLIC_SITE_URL}/dashboard?upgraded=true`,
       cancel_url: `${process.env.NEXT_PUBLIC_SITE_URL}/dashboard`,
-      customer_email: user.email,
+      customer: customerId,
+      customer_email: customerId ? undefined : user.email,
       metadata: { user_id: user.id },
     })
 
