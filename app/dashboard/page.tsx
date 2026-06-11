@@ -137,7 +137,7 @@ export default function Dashboard() {
       <div style={{ display: 'grid', gridTemplateColumns: '260px 1fr', minHeight: 'calc(100vh - 64px)' }}>
         <Sidebar active="Dashboard" isPro={isPro} />
 
-        <main style={{ padding: '48px 56px 48px 48px', maxWidth: 900 }}>
+        <main style={{ padding: '48px 48px' }}>
 
           {/* Welcome */}
           <div style={{ marginBottom: 40 }}>
