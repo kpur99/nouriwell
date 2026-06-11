@@ -123,6 +123,18 @@ export default function Dashboard() {
               ✦ Upgrade to Pro
             </button>
           )}
+          {isPro && (
+            <button
+              onClick={async () => {
+                const res = await fetch('/api/portal', { method: 'POST' })
+                const data = await res.json()
+                if (data.url) window.location.href = data.url
+              }}
+              style={{ fontSize: 13, color: '#5a7a6a', padding: '7px 16px', borderRadius: 20, cursor: 'pointer', background: 'none', border: '0.5px solid #e0d8c8', fontFamily: 'inherit' }}
+            >
+              Manage subscription
+            </button>
+          )}
           {profile?.name && (
             <span style={{ fontSize: 13, color: '#8aad96' }}>
               {greeting()}, <strong style={{ color: '#1a3328', fontWeight: 500 }}>{profile.name}</strong>
