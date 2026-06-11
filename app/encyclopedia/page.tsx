@@ -1,7 +1,8 @@
 'use client'
 import { useState, useEffect } from 'react'
+import Link from 'next/link'
 import Sidebar from '../components/Sidebar'
-import { getUserAccess } from '../../lib/supabase'
+import { supabase, getUserAccess } from '../../lib/supabase'
 
 const BROWSE = [
   { category: 'Herbs', items: ['Ashwagandha', 'Turmeric', 'Ginger', 'Echinacea', 'Valerian root', 'Milk thistle', 'Rhodiola', 'Holy basil'] },
@@ -30,19 +31,23 @@ interface EncyclopediaEntry {
 }
 
 export default function Encyclopedia() {
+  const [profile, setProfile] = useState<{ name: string } | null>(null)
   const [isPro, setIsPro] = useState(false)
-  const [checkingAccess, setCheckingAccess] = useState(true)
   const [search, setSearch] = useState('')
   const [loading, setLoading] = useState(false)
   const [entry, setEntry] = useState<EncyclopediaEntry | null>(null)
 
   useEffect(() => {
-    async function checkAccess() {
+    async function load() {
+      const { data: { user } } = await supabase.auth.getUser()
+      if (user) {
+        const { data } = await supabase.from('profiles').select('name').eq('id', user.id).single()
+        if (data) setProfile(data)
+      }
       const { isPro } = await getUserAccess()
       setIsPro(isPro)
-      setCheckingAccess(false)
     }
-    checkAccess()
+    load()
   }, [])
 
   async function lookup(query: string) {
@@ -64,8 +69,45 @@ export default function Encyclopedia() {
   const evidenceColor = (e: string) => e === 'strong' ? 'bg-[#E1F5EE] text-[#085041]' : e === 'moderate' ? 'bg-[#FAEEDA] text-[#633806]' : 'bg-[#f4faf7] text-[#7aaa94]'
 
   return (
-    <div className="min-h-screen bg-[#f4faf7] font-sans">
-      <div style={{ display: 'grid', gridTemplateColumns: '260px 1fr', minHeight: '100vh' }}>
+    <div style={{ fontFamily: 'system-ui, sans-serif', background: '#faf8f3', minHeight: '100vh' }}>
+
+      {/* Nav */}
+      <nav style={{ height: 64, background: '#fff', borderBottom: '0.5px solid #e0d8c8', display: 'flex', alignItems: 'center', padding: '0 32px', position: 'sticky', top: 0, zIndex: 50 }}>
+        <Link href="/" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 10 }}>
+          <div style={{ width: 34, height: 34, borderRadius: '50%', background: '#2a5c45', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+              <path d="M12 3C12 3 6 9 6 14C6 17.3 8.7 20 12 20C15.3 20 18 17.3 18 14C18 9 12 3 12 3Z" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+          </div>
+          <span style={{ fontSize: 20, fontWeight: 500, color: '#1a3328', letterSpacing: '-0.3px' }}>
+            Nouri<span style={{ color: '#3d8c6a' }}>well</span>
+          </span>
+        </Link>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginLeft: 'auto' }}>
+          {!isPro && (
+            <button
+              onClick={async () => {
+                const res = await fetch('/api/checkout', { method: 'POST' })
+                const data = await res.json()
+                if (data.url) window.location.href = data.url
+              }}
+              style={{ background: '#2a5c45', color: '#fff', border: 'none', borderRadius: 20, padding: '8px 18px', fontSize: 13, fontWeight: 500, cursor: 'pointer', fontFamily: 'inherit' }}
+            >
+              ✦ Upgrade to Pro
+            </button>
+          )}
+          {profile?.name && (
+            <span style={{ fontSize: 13, color: '#8aad96' }}>
+              <strong style={{ color: '#1a3328', fontWeight: 500 }}>{profile.name}</strong>
+            </span>
+          )}
+          <div style={{ width: 34, height: 34, borderRadius: '50%', background: '#e8f0ea', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 13, fontWeight: 600, color: '#2a5c45' }}>
+            {profile?.name ? profile.name.charAt(0).toUpperCase() : 'U'}
+          </div>
+        </div>
+      </nav>
+
+      <div style={{ display: 'grid', gridTemplateColumns: '260px 1fr', minHeight: 'calc(100vh - 64px)' }}>
         <Sidebar active="Encyclopedia" isPro={isPro} />
         <div>
       <div className="bg-[#0a2e22] px-6 md:px-12 pt-12 pb-14 text-center">
