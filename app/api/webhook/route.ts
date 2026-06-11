@@ -69,16 +69,14 @@ export async function POST(req: NextRequest) {
     const customerId = subscription.customer as string
     const customer = await stripe.customers.retrieve(customerId) as Stripe.Customer
     const email = customer.email
+    console.log('Subscription cancelled for:', email)
 
     if (email) {
       const { data: users } = await supabase.auth.admin.listUsers()
       const user = users?.users?.find(u => u.email === email)
-
       if (user?.id) {
-        await supabase
-          .from('profiles')
-          .update({ is_beta: false })
-          .eq('id', user.id)
+        await supabase.from('profiles').update({ is_beta: false }).eq('id', user.id)
+        console.log('Pro access removed for:', user.id)
       }
     }
   }
