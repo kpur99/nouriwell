@@ -168,6 +168,19 @@ export default function RemedyFinder() {
         </div>
       </nav>
 
+      {/* Hero */}
+      <div style={{ background: '#1e3d2e', padding: '48px 32px', textAlign: 'center' }}>
+        <div style={{ display: 'inline-flex', alignItems: 'center', gap: 7, background: 'rgba(61,140,106,0.2)', color: '#7dc9a3', fontSize: 13, padding: '7px 18px', borderRadius: 20, marginBottom: 16, border: '0.5px solid rgba(125,201,163,0.3)' }}>
+          <HerbIcon size={14} color="#7dc9a3" /> AI Remedy Finder
+        </div>
+        <h1 style={{ fontSize: 36, fontWeight: 500, color: '#fff', marginBottom: 12, letterSpacing: '-0.3px' }}>
+          What are you <span style={{ color: '#7dc9a3', fontStyle: 'italic' }}>experiencing?</span>
+        </h1>
+        <p style={{ fontSize: 16, color: '#8aad96', maxWidth: 500, margin: '0 auto', lineHeight: 1.7, fontWeight: 300 }}>
+          Describe your symptoms and get specific essential oils, herbs, and supplements tailored to your profile.
+        </p>
+      </div>
+
       <div style={{ display: 'grid', gridTemplateColumns: '260px 1fr', minHeight: 'calc(100vh - 64px)' }}>
         <Sidebar active="Remedy finder" isPro={isPro} />
 
@@ -175,15 +188,6 @@ export default function RemedyFinder() {
 
           {/* Remedy finder */}
           <div style={{ padding: 32, borderRight: '0.5px solid #e0d8c8', minHeight: 'calc(100vh - 64px)' }}>
-            <div style={{ marginBottom: 24 }}>
-              <h1 style={{ fontSize: 26, fontWeight: 500, color: '#1a3328', marginBottom: 4 }}>What are you experiencing?</h1>
-              <p style={{ fontSize: 13, color: '#5a7a6a', fontWeight: 500, lineHeight: 1.5 }}>Select a concern or describe your symptoms — recommendations are tailored to your profile.</p>
-              {!isPro && (
-                <p style={{ fontSize: 12, color: '#8aad96', marginTop: 8 }}>
-                  {searchCount} of 3 free searches used this month
-                </p>
-              )}
-            </div>
 
             <p style={{ fontSize: 12, fontWeight: 600, color: '#2a5c45', letterSpacing: '0.06em', textTransform: 'uppercase', marginBottom: 10 }}>Quick select</p>
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: 7, marginBottom: 18 }}>
