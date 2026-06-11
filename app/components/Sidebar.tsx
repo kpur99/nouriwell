@@ -60,6 +60,10 @@ export default function Sidebar({ active, isPro = false }: SidebarProps) {
   return (
     <aside style={{ background: '#fff', borderRight: '0.5px solid #e0d8c8', padding: '24px 16px', display: 'flex', flexDirection: 'column', gap: 4, minHeight: 'calc(100vh - 64px)' }}>
 
+      {item('Dashboard', '/dashboard',
+        <svg viewBox="0 0 24 24" fill="none" width="18" height="18"><rect x="3" y="3" width="7" height="7" rx="1.5" stroke="currentColor" strokeWidth="1.8"/><rect x="14" y="3" width="7" height="7" rx="1.5" stroke="currentColor" strokeWidth="1.8"/><rect x="3" y="14" width="7" height="7" rx="1.5" stroke="currentColor" strokeWidth="1.8"/><rect x="14" y="14" width="7" height="7" rx="1.5" stroke="currentColor" strokeWidth="1.8"/></svg>
+      )}
+
       <p style={{ fontSize: 12, fontWeight: 600, color: '#2a5c45', letterSpacing: '0.08em', textTransform: 'uppercase', padding: '4px 12px 6px' }}>Free features</p>
 
       {item('Remedy finder', '/remedy-finder',
