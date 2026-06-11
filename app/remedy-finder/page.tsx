@@ -183,7 +183,7 @@ export default function RemedyFinder() {
         </p>
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '260px 1fr', minHeight: 'calc(100vh - 64px)' }}>
+      <div className="layout" style={{ display: 'grid', gridTemplateColumns: '260px 1fr', minHeight: 'calc(100vh - 64px)' }}>
         <Sidebar active="Remedy finder" isPro={isPro} />
 
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 300px', alignItems: 'start' }}>

@@ -24,3 +24,58 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+.mobile-bottom-nav {
+  display: none;
+}
+
+@media (max-width: 768px) {
+  /* Hide sidebar on mobile */
+  aside { display: none !important; }
+
+  /* Single column grid */
+  .layout, [style*="grid-template-columns: 260px"] {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Stack main grids */
+  [style*="grid-template-columns: 1fr 300px"],
+  [style*="grid-template-columns: 1fr 1fr 1fr"],
+  [style*="repeat(3, 1fr)"],
+  [style*="repeat(2, 1fr)"] {
+    grid-template-columns: 1fr !important;
+  }
+
+  /* Mobile bottom nav */
+  .mobile-bottom-nav {
+    display: flex !important;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 64px;
+    background: #fff;
+    border-top: 0.5px solid #e0d8c8;
+    z-index: 50;
+    justify-content: space-around;
+    align-items: center;
+    padding-bottom: env(safe-area-inset-bottom, 0);
+  }
+
+  body:has(.mobile-bottom-nav) {
+    padding-bottom: 64px;
+  }
+
+  /* App page content padding */
+  main[style*="padding: '48px 48px'"],
+  main[style*='padding: "48px 48px"'] {
+    padding: 24px 16px !important;
+  }
+
+  /* App nav padding */
+  nav[style*="padding: 0px 32px"],
+  nav[style*="padding:0 32px"] {
+    padding-left: 16px !important;
+    padding-right: 16px !important;
+  }
+}

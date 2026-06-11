@@ -109,7 +109,7 @@ export default function Encyclopedia() {
         </div>
       </nav>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '260px 1fr', minHeight: 'calc(100vh - 64px)' }}>
+      <div className="layout" style={{ display: 'grid', gridTemplateColumns: '260px 1fr', minHeight: 'calc(100vh - 64px)' }}>
         <Sidebar active="Encyclopedia" isPro={isPro} />
         <div>
       <div className="bg-[#0a2e22] px-6 md:px-12 pt-12 pb-14 text-center">

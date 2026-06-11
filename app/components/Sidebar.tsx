@@ -1,5 +1,8 @@
 'use client'
+import { useState, useEffect } from 'react'
+import { createPortal } from 'react-dom'
 import Link from 'next/link'
+import MobileBottomNav from './MobileBottomNav'
 
 interface SidebarProps {
   active: string
@@ -19,6 +22,9 @@ const resourceLibraryIcon = (
 )
 
 export default function Sidebar({ active, isPro = false }: SidebarProps) {
+  const [mounted, setMounted] = useState(false)
+  useEffect(() => setMounted(true), [])
+
   const item = (label: string, href: string, icon: React.ReactNode, badge?: string, badgeType?: string) => (
     <Link href={href} style={{ textDecoration: 'none' }}>
       <div style={{
@@ -58,6 +64,7 @@ export default function Sidebar({ active, isPro = false }: SidebarProps) {
   )
 
   return (
+    <>
     <aside style={{ background: '#fff', borderRight: '0.5px solid #e0d8c8', padding: '24px 16px', display: 'flex', flexDirection: 'column', gap: 4, minHeight: 'calc(100vh - 64px)' }}>
 
       {item('Dashboard', '/dashboard',
@@ -114,5 +121,7 @@ export default function Sidebar({ active, isPro = false }: SidebarProps) {
         </button>
       </div>
     </aside>
+    {mounted && createPortal(<MobileBottomNav active={active} />, document.body)}
+    </>
   )
 }

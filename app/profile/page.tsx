@@ -174,7 +174,7 @@ export default function ProfilePage() {
         </div>
       </nav>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '260px 1fr', minHeight: 'calc(100vh - 64px)' }}>
+      <div className="layout" style={{ display: 'grid', gridTemplateColumns: '260px 1fr', minHeight: 'calc(100vh - 64px)' }}>
         <Sidebar active="My profile" isPro={isPro} />
 
         <main style={{ padding: '48px' }}>

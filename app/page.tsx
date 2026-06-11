@@ -1,3 +1,4 @@
+'use client'
 import Link from 'next/link'
 import {
   ColdImmunityIcon, HerbIcon, PracticeIcon,
@@ -5,13 +6,16 @@ import {
   RemedyFinderIcon, SupplementTrackerIcon, ResourceLibraryIcon,
   CycleSyncingIcon, HealingRecipesIcon, EncyclopediaIcon, ChatBubbleIcon
 } from './components/NouriIcons'
+import { useIsMobile } from './hooks/useIsMobile'
 
 export default function Home() {
+  const isMobile = useIsMobile()
+
   return (
     <div style={{ fontFamily: 'system-ui, sans-serif', background: '#faf8f3', minHeight: '100vh' }}>
 
       {/* Nav */}
-      <nav style={{ position: 'fixed', top: 0, left: 0, right: 0, zIndex: 100, display: 'flex', alignItems: 'center', padding: '0 48px', height: 72, background: 'rgba(250,248,243,0.95)', backdropFilter: 'blur(8px)', borderBottom: '0.5px solid #e0d8c8' }}>
+      <nav style={{ position: 'fixed', top: 0, left: 0, right: 0, zIndex: 100, display: 'flex', alignItems: 'center', padding: isMobile ? '0 16px' : '0 48px', height: 72, background: 'rgba(250,248,243,0.95)', backdropFilter: 'blur(8px)', borderBottom: '0.5px solid #e0d8c8' }}>
         <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
           <div style={{ width: 34, height: 34, borderRadius: '50%', background: '#2a5c45', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             <svg width="20" height="20" viewBox="0 0 34 34" fill="none">
@@ -24,15 +28,19 @@ export default function Home() {
             Nouri<span style={{ color: '#3d8c6a' }}>well</span>
           </span>
         </div>
-        <div style={{ display: 'flex', gap: 4, marginLeft: 'auto', marginRight: 20 }}>
-          {['Features', 'How it works', 'Pricing'].map(n => (
-            <button key={n} style={{ fontSize: 14, color: '#5a7a6a', padding: '7px 16px', borderRadius: 20, cursor: 'pointer', background: 'none', border: 'none', fontFamily: 'inherit' }}>{n}</button>
-          ))}
-        </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-          <Link href="/login">
-            <button style={{ fontSize: 14, color: '#5a7a6a', padding: '7px 16px', borderRadius: 20, cursor: 'pointer', background: 'none', border: 'none', fontFamily: 'inherit' }}>Sign in</button>
-          </Link>
+        {!isMobile && (
+          <div style={{ display: 'flex', gap: 4, marginLeft: 'auto', marginRight: 20 }}>
+            {['Features', 'How it works', 'Pricing'].map(n => (
+              <button key={n} style={{ fontSize: 14, color: '#5a7a6a', padding: '7px 16px', borderRadius: 20, cursor: 'pointer', background: 'none', border: 'none', fontFamily: 'inherit' }}>{n}</button>
+            ))}
+          </div>
+        )}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginLeft: isMobile ? 'auto' : undefined }}>
+          {!isMobile && (
+            <Link href="/login">
+              <button style={{ fontSize: 14, color: '#5a7a6a', padding: '7px 16px', borderRadius: 20, cursor: 'pointer', background: 'none', border: 'none', fontFamily: 'inherit' }}>Sign in</button>
+            </Link>
+          )}
           <Link href="/signup">
             <button style={{ background: '#2a5c45', color: '#fff', border: 'none', borderRadius: 20, padding: '8px 22px', fontSize: 14, fontWeight: 500, cursor: 'pointer', fontFamily: 'inherit' }}>Start free</button>
           </Link>
@@ -40,18 +48,18 @@ export default function Home() {
       </nav>
 
       {/* Hero */}
-      <div style={{ background: '#1e3d2e', minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '120px 48px 100px', textAlign: 'center', position: 'relative' }}>
+      <div style={{ background: '#1e3d2e', minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: isMobile ? '100px 20px 60px' : '120px 48px 100px', textAlign: 'center', position: 'relative' }}>
         <div style={{ fontSize: 22, fontWeight: 400, color: 'rgba(255,255,255,0.4)', letterSpacing: '0.25em', textTransform: 'uppercase', marginBottom: 20 }}>
           Nouriwell
         </div>
         <div style={{ display: 'inline-flex', alignItems: 'center', gap: 7, background: 'rgba(61,140,106,0.2)', color: '#7dc9a3', fontSize: 13, padding: '7px 18px', borderRadius: 20, marginBottom: 36, border: '0.5px solid rgba(125,201,163,0.3)' }}>
           <HerbIcon size={14} color="#7dc9a3" /> Holistic health, powered by AI
         </div>
-        <h1 style={{ fontSize: 80, fontWeight: 500, color: '#fff', lineHeight: 1.05, marginBottom: 28, letterSpacing: '-1px', maxWidth: 820 }}>
+        <h1 style={{ fontSize: isMobile ? 44 : 80, fontWeight: 500, color: '#fff', lineHeight: 1.05, marginBottom: 28, letterSpacing: '-1px', maxWidth: 820 }}>
           Natural remedies,<br />
           <span style={{ color: '#7dc9a3', fontStyle: 'italic' }}>made for your body</span>
         </h1>
-        <p style={{ fontSize: 20, color: '#8aad96', lineHeight: 1.7, maxWidth: 540, margin: '0 auto 48px', fontWeight: 300 }}>
+        <p style={{ fontSize: isMobile ? 16 : 20, color: '#8aad96', lineHeight: 1.7, maxWidth: 540, margin: '0 auto 48px', fontWeight: 300 }}>
           Describe your symptoms and get specific essential oils, herbs, and supplements — tailored to your diet, lifestyle, and goals.
         </p>
         <div style={{ display: 'flex', gap: 14, justifyContent: 'center', marginBottom: 20, flexWrap: 'wrap' }}>
@@ -80,7 +88,7 @@ export default function Home() {
           { icon: <ColdImmunityIcon size={24} color="#3d8c6a" />, title: 'Safety first', desc: 'Your profile flags allergies and medication interactions before every recommendation.' },
           { icon: <PracticeIcon size={24} color="#3d8c6a" />, title: 'Built around you', desc: 'Your diet, stress level, and health goals shape every single recommendation we make.' },
         ].map((f, i) => (
-          <div key={f.title} style={{ padding: '32px 28px', borderRight: i < 2 ? '0.5px solid #e0d8c8' : 'none' }}>
+          <div key={f.title} style={{ padding: isMobile ? '24px 20px' : '32px 28px', borderRight: !isMobile && i < 2 ? '0.5px solid #e0d8c8' : 'none', borderBottom: isMobile && i < 2 ? '0.5px solid #e0d8c8' : 'none' }}>
             <div style={{ marginBottom: 12 }}>{f.icon}</div>
             <div style={{ fontSize: 15, fontWeight: 500, color: '#1a3328', marginBottom: 6 }}>{f.title}</div>
             <div style={{ fontSize: 13, color: '#5a7a6a', lineHeight: 1.65 }}>{f.desc}</div>
@@ -89,10 +97,10 @@ export default function Home() {
       </div>
 
       {/* Features */}
-      <div style={{ background: '#faf8f3', padding: '72px 48px' }} id="features">
+      <div style={{ background: '#faf8f3', padding: isMobile ? '48px 20px' : '72px 48px' }} id="features">
         <p style={{ fontSize: 12, color: '#3d8c6a', fontWeight: 600, letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 8 }}>Everything in one place</p>
-        <h2 style={{ fontSize: 36, fontWeight: 500, color: '#1a3328', marginBottom: 36, letterSpacing: '-0.3px' }}>Your complete holistic toolkit</h2>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 12 }}>
+        <h2 style={{ fontSize: isMobile ? 28 : 36, fontWeight: 500, color: '#1a3328', marginBottom: 36, letterSpacing: '-0.3px' }}>Your complete holistic toolkit</h2>
+        <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : 'repeat(3, 1fr)', gap: 12 }}>
           {[
             { icon: <RemedyFinderIcon size={22} color="#a8d4be" />, title: 'AI remedy finder', badge: 'Free', desc: 'Specific oils, herbs, and supplements with exact doses for what ails you.', href: '/dashboard' },
             { icon: <SupplementTrackerIcon size={22} color="#a8d4be" />, title: 'Supplement tracker', badge: 'Free', desc: 'Log your stack, track your streak, and check for interactions with AI.', href: '/tracker' },
@@ -116,10 +124,10 @@ export default function Home() {
       </div>
 
       {/* How it works */}
-      <div style={{ background: '#2a5c45', padding: '72px 48px', textAlign: 'center' }} id="how">
+      <div style={{ background: '#2a5c45', padding: isMobile ? '48px 20px' : '72px 48px', textAlign: 'center' }} id="how">
         <p style={{ fontSize: 12, color: '#7dc9a3', fontWeight: 600, letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 8 }}>How it works</p>
-        <h2 style={{ fontSize: 36, fontWeight: 500, color: '#fff', marginBottom: 48, letterSpacing: '-0.3px' }}>Up and running in minutes</h2>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 40 }}>
+        <h2 style={{ fontSize: isMobile ? 28 : 36, fontWeight: 500, color: '#fff', marginBottom: 48, letterSpacing: '-0.3px' }}>Up and running in minutes</h2>
+        <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : 'repeat(3, 1fr)', gap: isMobile ? 32 : 40 }}>
           {[
             { num: '01', title: 'Build your profile', desc: 'Complete a quick 7-step quiz covering your age, goals, diet, stress level, allergies, and medications.' },
             { num: '02', title: 'Describe what you feel', desc: 'Type your symptoms or tap a quick-select chip. The AI cross-references your profile to personalize every recommendation.' },
@@ -135,7 +143,7 @@ export default function Home() {
       </div>
 
       {/* Demo */}
-      <div style={{ background: '#faf8f3', padding: '72px 48px', borderBottom: '0.5px solid #e0d8c8', textAlign: 'center' }}>
+      <div style={{ background: '#faf8f3', padding: isMobile ? '48px 20px' : '72px 48px', borderBottom: '0.5px solid #e0d8c8', textAlign: 'center' }}>
         <p style={{ fontSize: 12, color: '#3d8c6a', fontWeight: 600, letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 8 }}>See it in action</p>
         <h2 style={{ fontSize: 36, fontWeight: 500, color: '#1a3328', marginBottom: 28, letterSpacing: '-0.3px' }}>Real answers, not generic advice</h2>
         <div style={{ background: '#fff', border: '0.5px solid #e0d8c8', borderRadius: 22, padding: 32, maxWidth: 900, margin: '0 auto', textAlign: 'left' }}>
@@ -175,10 +183,10 @@ export default function Home() {
       </div>
 
       {/* Pricing */}
-      <div style={{ background: '#faf8f3', padding: '72px 48px', textAlign: 'center' }} id="pricing">
+      <div style={{ background: '#faf8f3', padding: isMobile ? '48px 20px' : '72px 48px', textAlign: 'center' }} id="pricing">
         <p style={{ fontSize: 12, color: '#3d8c6a', fontWeight: 600, letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 8 }}>Simple pricing</p>
-        <h2 style={{ fontSize: 36, fontWeight: 500, color: '#1a3328', marginBottom: 48, letterSpacing: '-0.3px' }}>Start free, upgrade when ready</h2>
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16, maxWidth: 580, margin: '0 auto', textAlign: 'left' }}>
+        <h2 style={{ fontSize: isMobile ? 28 : 36, fontWeight: 500, color: '#1a3328', marginBottom: 48, letterSpacing: '-0.3px' }}>Start free, upgrade when ready</h2>
+        <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap: 16, maxWidth: 580, margin: '0 auto', textAlign: 'left' }}>
           {[
             {
               name: 'Seed', badge: 'Free', badgeBg: '#e8f0ea', badgeColor: '#2a5c45',
@@ -216,14 +224,14 @@ export default function Home() {
       </div>
 
       {/* Footer */}
-      <div style={{ background: '#1e3d2e', padding: '24px 48px', display: 'flex', alignItems: 'center', gap: 12 }}>
+      <div style={{ background: '#1e3d2e', padding: isMobile ? '24px 20px' : '24px 48px', display: 'flex', alignItems: 'center', gap: 12, flexWrap: isMobile ? 'wrap' : 'nowrap' }}>
         <div style={{ width: 28, height: 28, borderRadius: '50%', background: '#3d8c6a', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
           <svg width="13" height="13" viewBox="0 0 24 24" fill="none">
             <path d="M12 3C12 3 6 9 6 14C6 17.3 8.7 20 12 20C15.3 20 18 17.3 18 14C18 9 12 3 12 3Z" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
           </svg>
         </div>
         <span style={{ fontSize: 15, fontWeight: 500, color: '#fff' }}>Nouri<span style={{ color: '#7dc9a3' }}>well</span></span>
-        <span style={{ fontSize: 12, color: '#4a6a5a', marginLeft: 'auto' }}>Holistic health, naturally guided · © 2026 · Not medical advice · Always consult a healthcare provider</span>
+        <span style={{ fontSize: 12, color: '#4a6a5a', marginLeft: isMobile ? 0 : 'auto', width: isMobile ? '100%' : 'auto' }}>Holistic health, naturally guided · © 2026 · Not medical advice · Always consult a healthcare provider</span>
       </div>
 
     </div>

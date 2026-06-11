@@ -100,7 +100,7 @@ export default function Cycle() {
         </div>
       </nav>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '260px 1fr', minHeight: 'calc(100vh - 64px)' }}>
+      <div className="layout" style={{ display: 'grid', gridTemplateColumns: '260px 1fr', minHeight: 'calc(100vh - 64px)' }}>
         <Sidebar active="Hormone balancing" isPro={isPro} />
         <div>
         {isPro ? (
