@@ -25,6 +25,7 @@ const lockIcon = (
 
 export default function Dashboard() {
   const [profile, setProfile] = useState<Profile | null>(null)
+  const [searchCount, setSearchCount] = useState(0)
   const [isPro, setIsPro] = useState(true)
 
   useEffect(() => {
@@ -32,7 +33,10 @@ export default function Dashboard() {
       const { data: { user } } = await supabase.auth.getUser()
       if (user) {
         const { data } = await supabase.from('profiles').select('*').eq('id', user.id).single()
-        if (data) setProfile(data)
+        if (data) {
+          setProfile(data)
+          setSearchCount(data?.remedy_searches_count || 0)
+        }
       }
       const { isPro: proStatus } = await getUserAccess()
       setIsPro(proStatus)
@@ -166,9 +170,9 @@ export default function Dashboard() {
             <div style={{ background: '#fff', border: '0.5px solid #e0d8c8', borderRadius: 14, padding: '16px 20px', marginBottom: 36, display: 'flex', alignItems: 'center', gap: 16 }}>
               <div style={{ flex: 1 }}>
                 <div style={{ fontSize: 13, fontWeight: 500, color: '#1a3328', marginBottom: 2 }}>Free remedy searches</div>
-                <div style={{ fontSize: 11, color: '#8aad96' }}>3 per month included</div>
+                <div style={{ fontSize: 11, color: '#8aad96' }}>{searchCount} of 3 used this month</div>
                 <div style={{ marginTop: 8, height: 6, background: '#e8f0ea', borderRadius: 10, overflow: 'hidden' }}>
-                  <div style={{ height: 6, background: '#3d8c6a', borderRadius: 10, width: '0%' }} />
+                  <div style={{ height: 6, background: '#3d8c6a', borderRadius: 10, width: `${(searchCount / 3) * 100}%` }} />
                 </div>
               </div>
               <div style={{ fontSize: 15, fontWeight: 500, color: '#1a3328', whiteSpace: 'nowrap' }}>0 <span style={{ fontSize: 12, fontWeight: 400, color: '#8aad96' }}>/ 3</span></div>
