@@ -98,7 +98,7 @@ export default function Sidebar({ active, isPro = false }: SidebarProps) {
       )}
 
       <div style={{ marginTop: 'auto', paddingTop: 16, borderTop: '0.5px solid #e0d8c8' }}>
-        {item('My profile', '/onboarding',
+        {item('My profile', '/profile',
           <svg viewBox="0 0 24 24" fill="none" width="18" height="18"><circle cx="12" cy="8" r="4" stroke="currentColor" strokeWidth="1.8"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round"/></svg>
         )}
         <button
