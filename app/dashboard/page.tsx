@@ -2,12 +2,7 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { supabase, getUserAccess } from '../../lib/supabase'
-import {
-  HeadacheIcon, StomachAcheIcon, AnxietyIcon, BrainFogIcon,
-  PoorSleepIcon, LowEnergyIcon, MusclePainIcon, BloatingIcon,
-  ColdImmunityIcon, InflammationIcon, EssentialOilIcon, HerbIcon,
-  SupplementIcon, PracticeIcon
-} from '../components/NouriIcons'
+import { HerbIcon } from '../components/NouriIcons'
 import Sidebar from '../components/Sidebar'
 
 interface Profile {
@@ -21,120 +16,89 @@ interface Profile {
   pregnant: boolean
 }
 
-interface Remedy {
-  name: string
-  emoji: string
-  type: string
-  how: string
-}
-
-interface Results {
-  intro: string
-  remedies: Remedy[]
-}
-
-const AILMENTS = [
-  { label: 'Headache', icon: <HeadacheIcon size={13} /> },
-  { label: 'Stomach ache', icon: <StomachAcheIcon size={13} /> },
-  { label: 'Anxiety', icon: <AnxietyIcon size={13} /> },
-  { label: 'Poor sleep', icon: <PoorSleepIcon size={13} /> },
-  { label: 'Low energy', icon: <LowEnergyIcon size={13} /> },
-  { label: 'Muscle pain', icon: <MusclePainIcon size={13} /> },
-  { label: 'Bloating', icon: <BloatingIcon size={13} /> },
-  { label: 'Cold / immunity', icon: <ColdImmunityIcon size={13} /> },
-  { label: 'Brain fog', icon: <BrainFogIcon size={13} /> },
-  { label: 'Inflammation', icon: <InflammationIcon size={13} /> },
-]
-
-const typeStyle: Record<string, { bg: string; color: string }> = {
-  'essential oil': { bg: 'rgba(250,238,218,0.25)', color: '#f0c4a8' },
-  herb: { bg: 'rgba(232,240,234,0.2)', color: '#a8d4be' },
-  supplement: { bg: 'rgba(238,237,254,0.2)', color: '#d4c8f5' },
-  food: { bg: 'rgba(250,236,231,0.2)', color: '#f0b8a8' },
-  practice: { bg: 'rgba(251,234,240,0.2)', color: '#f0b8c8' },
-}
-
-const typeIconColor: Record<string, string> = {
-  'essential oil': '#f0c4a8',
-  herb: '#a8d4be',
-  supplement: '#d4c8f5',
-  food: '#f0b8a8',
-  practice: '#f0b8c8',
-}
-
-function RemedyIcon({ type, size = 16 }: { type: string; size?: number }) {
-  const color = typeIconColor[type] || '#a8d4be'
-  if (type === 'essential oil') return <EssentialOilIcon size={size} color={color} />
-  if (type === 'herb') return <HerbIcon size={size} color={color} />
-  if (type === 'supplement') return <SupplementIcon size={size} color={color} />
-  if (type === 'practice') return <PracticeIcon size={size} color={color} />
-  return <HerbIcon size={size} color={color} />
-}
+const lockIcon = (
+  <svg width="13" height="13" viewBox="0 0 24 24" fill="none">
+    <path d="M18 11H6a2 2 0 00-2 2v6a2 2 0 002 2h12a2 2 0 002-2v-6a2 2 0 00-2-2z" stroke="#a8d4be" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+    <path d="M8 11V7a4 4 0 018 0v4" stroke="#a8d4be" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+  </svg>
+)
 
 export default function Dashboard() {
   const [profile, setProfile] = useState<Profile | null>(null)
-  const [selected, setSelected] = useState<string[]>([])
-  const [symptom, setSymptom] = useState('')
-  const [severity, setSeverity] = useState('moderate')
-  const [loading, setLoading] = useState(false)
-  const [results, setResults] = useState<Results | null>(null)
-  const [error, setError] = useState('')
   const [isPro, setIsPro] = useState(true)
 
   useEffect(() => {
-    const params = new URLSearchParams(window.location.search)
-    if (params.get('upgraded') === 'true') {
-      // Refresh the page to reload Pro status after a short delay
-      setTimeout(() => {
-        window.location.href = '/dashboard'
-      }, 2000)
-    }
-  }, [])
-
-  useEffect(() => {
-    async function loadProfile() {
+    async function load() {
       const { data: { user } } = await supabase.auth.getUser()
-      const { isPro: proStatus } = await getUserAccess()
-      setIsPro(proStatus)
       if (user) {
         const { data } = await supabase.from('profiles').select('*').eq('id', user.id).single()
         if (data) setProfile(data)
       }
+      const { isPro: proStatus } = await getUserAccess()
+      setIsPro(proStatus)
     }
-    loadProfile()
+    load()
   }, [])
 
-  function toggleChip(label: string) {
-    setSelected(s => s.includes(label) ? s.filter(x => x !== label) : [...s, label])
-  }
+  const freeTools = [
+    {
+      href: '/remedy-finder',
+      icon: <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><circle cx="10" cy="10" r="6" stroke="#2a5c45" strokeWidth="2"/><path d="M14.5 14.5L20 20" stroke="#2a5c45" strokeWidth="2" strokeLinecap="round"/><path d="M10 13V8" stroke="#2a5c45" strokeWidth="1.8" strokeLinecap="round"/><path d="M10 10C8 10 7 8.5 7 7C9 7 10 8.5 10 10Z" stroke="#2a5c45" strokeWidth="1.6" strokeLinejoin="round"/><path d="M10 10C12 10 13 8.5 13 7C11 7 10 8.5 10 10Z" stroke="#2a5c45" strokeWidth="1.6" strokeLinejoin="round"/></svg>,
+      iconBg: '#e8f0ea',
+      title: 'Find a remedy',
+      desc: 'Describe your symptoms and get personalized oils, herbs, and supplements'
+    },
+    {
+      href: '/tracker',
+      icon: <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><rect x="4" y="3" width="16" height="18" rx="3" stroke="#2a5c45" strokeWidth="2"/><path d="M8 8h8M8 12h5" stroke="#2a5c45" strokeWidth="1.8" strokeLinecap="round"/><path d="M7 16l1 1 2-2" stroke="#2a5c45" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/></svg>,
+      iconBg: '#e8f0ea',
+      title: 'Log supplements',
+      desc: 'Track today\'s supplements and check for interactions'
+    },
+    {
+      href: '/encyclopedia',
+      icon: <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M12 3L4 6v7c0 4 3.5 7.5 8 9 4.5-1.5 8-5 8-9V6l-8-3z" stroke="#2a5c45" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/><path d="M12 8v4" stroke="#2a5c45" strokeWidth="2" strokeLinecap="round"/><circle cx="12" cy="15" r="1" fill="#2a5c45"/></svg>,
+      iconBg: '#e8f0ea',
+      title: 'Look something up',
+      desc: 'Search the holistic encyclopedia for any herb or supplement'
+    },
+  ]
 
-  async function findRemedies() {
-    const query = selected.length
-      ? selected.join(', ') + (symptom ? '. ' + symptom : '')
-      : symptom
-    if (!query.trim()) return
-    setLoading(true)
-    setResults(null)
-    setError('')
-    try {
-      const res = await fetch('/api/remedies', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ symptom: query + '. Severity: ' + severity, profile: profile || {} })
-      })
-      const data = await res.json()
-      if (data.error) setError(data.error)
-      else setResults(data)
-    } catch {
-      setError('Something went wrong. Please try again.')
-    }
-    setLoading(false)
+  const proTools = [
+    {
+      href: '/cycle',
+      icon: <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M4 12a8 8 0 018-8" stroke="#a8d4be" strokeWidth="2" strokeLinecap="round"/><path d="M20 12a8 8 0 01-8 8" stroke="#a8d4be" strokeWidth="2" strokeLinecap="round"/><path d="M12 4V2M12 4L10 6M12 4L14 6" stroke="#a8d4be" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/><circle cx="12" cy="12" r="2" stroke="#a8d4be" strokeWidth="1.6"/></svg>,
+      iconBg: 'rgba(255,255,255,0.1)',
+      title: 'Hormone balancing',
+      desc: 'Phase-specific remedies, foods, and practices'
+    },
+    {
+      href: '/recipes',
+      icon: <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M5 10C5 14 8 17 12 17C16 17 19 14 19 10" stroke="#a8d4be" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/><path d="M3 10h18" stroke="#a8d4be" strokeWidth="2" strokeLinecap="round"/><path d="M9 20h6" stroke="#a8d4be" strokeWidth="2" strokeLinecap="round"/><path d="M12 20v-3" stroke="#a8d4be" strokeWidth="1.8" strokeLinecap="round"/><path d="M12 7V5" stroke="#a8d4be" strokeWidth="1.8" strokeLinecap="round"/><path d="M12 5C10 5 9 3.5 9 2C11 2 12 3.5 12 5Z" stroke="#a8d4be" strokeWidth="1.6" strokeLinejoin="round"/><path d="M12 5C14 5 15 3.5 15 2C13 2 12 3.5 12 5Z" stroke="#a8d4be" strokeWidth="1.6" strokeLinejoin="round"/></svg>,
+      iconBg: 'rgba(255,255,255,0.1)',
+      title: 'Healing recipes',
+      desc: 'Anti-inflammatory meals built around your goals'
+    },
+    {
+      href: '/library',
+      icon: <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M4 19V6a2 2 0 012-2h14v13" stroke="#a8d4be" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/><path d="M4 19a2 2 0 002 2h14" stroke="#a8d4be" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/><path d="M4 19a2 2 0 012-2h14" stroke="#a8d4be" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/><path d="M15 4v7l-2-1.5L11 11V4" stroke="#a8d4be" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/></svg>,
+      iconBg: 'rgba(255,255,255,0.1)',
+      title: 'Resource library',
+      desc: 'Curated podcasts, books, and videos'
+    },
+  ]
+
+  const greeting = () => {
+    const h = new Date().getHours()
+    if (h < 12) return 'Good morning'
+    if (h < 17) return 'Good afternoon'
+    return 'Good evening'
   }
 
   return (
     <div style={{ fontFamily: 'system-ui, sans-serif', background: '#faf8f3', minHeight: '100vh' }}>
 
-      {/* Top nav */}
+      {/* Nav */}
       <nav style={{ height: 64, background: '#fff', borderBottom: '0.5px solid #e0d8c8', display: 'flex', alignItems: 'center', padding: '0 32px', position: 'sticky', top: 0, zIndex: 50 }}>
         <Link href="/" style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 10 }}>
           <div style={{ width: 34, height: 34, borderRadius: '50%', background: '#2a5c45', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
@@ -154,221 +118,115 @@ export default function Dashboard() {
                 const data = await res.json()
                 if (data.url) window.location.href = data.url
               }}
-              style={{ background: '#1e3d2e', color: '#fff', border: 'none', borderRadius: 20, padding: '8px 18px', fontSize: 13, fontWeight: 500, cursor: 'pointer', fontFamily: 'inherit' }}
+              style={{ background: '#2a5c45', color: '#fff', border: 'none', borderRadius: 20, padding: '8px 18px', fontSize: 13, fontWeight: 500, cursor: 'pointer', fontFamily: 'inherit' }}
             >
               ✦ Upgrade to Pro
             </button>
           )}
           {profile?.name && (
             <span style={{ fontSize: 13, color: '#8aad96' }}>
-              Good morning, <strong style={{ color: '#1a3328', fontWeight: 500 }}>{profile.name}</strong>
+              {greeting()}, <strong style={{ color: '#1a3328', fontWeight: 500 }}>{profile.name}</strong>
             </span>
           )}
           <div style={{ width: 34, height: 34, borderRadius: '50%', background: '#e8f0ea', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 13, fontWeight: 600, color: '#2a5c45' }}>
             {profile?.name ? profile.name.charAt(0).toUpperCase() : 'U'}
           </div>
-          <button
-            onClick={async () => {
-              await supabase.auth.signOut()
-              window.location.href = '/'
-            }}
-            style={{ fontSize: 13, color: '#5a7a6a', padding: '7px 16px', borderRadius: 20, cursor: 'pointer', background: 'none', border: '0.5px solid #e0d8c8', fontFamily: 'inherit' }}
-          >
-            Sign out
-          </button>
         </div>
       </nav>
 
       <div style={{ display: 'grid', gridTemplateColumns: '260px 1fr', minHeight: 'calc(100vh - 64px)' }}>
+        <Sidebar active="Dashboard" isPro={isPro} />
 
-        <Sidebar active="Remedy finder" isPro={isPro} />
+        <main style={{ padding: '48px 56px 48px 48px', maxWidth: 900 }}>
 
-        {/* Main content */}
-        <div style={{ display: 'grid', gridTemplateColumns: '1fr 300px', alignItems: 'start' }}>
-
-          {/* Remedy finder */}
-          <div style={{ padding: 32, borderRight: '0.5px solid #e0d8c8', minHeight: 'calc(100vh - 64px)' }}>
-            <div style={{ marginBottom: 24 }}>
-              <h1 style={{ fontSize: 26, fontWeight: 500, color: '#1a3328', marginBottom: 4 }}>What are you experiencing?</h1>
-              <p style={{ fontSize: 13, color: '#5a7a6a', fontWeight: 500, lineHeight: 1.5 }}>Select a concern or describe your symptoms — recommendations are tailored to your profile.</p>
-            </div>
-
-            <p style={{ fontSize: 12, fontWeight: 600, color: '#2a5c45', letterSpacing: '0.06em', textTransform: 'uppercase', marginBottom: 10 }}>Quick select</p>
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 7, marginBottom: 18 }}>
-              {AILMENTS.map(a => (
-                <button
-                  key={a.label}
-                  onClick={() => toggleChip(a.label)}
-                  style={{
-                    display: 'flex', alignItems: 'center', gap: 5, padding: '6px 12px',
-                    borderRadius: 20, border: selected.includes(a.label) ? '1px solid #3d8c6a' : '1px solid #e0d8c8',
-                    background: selected.includes(a.label) ? '#e8f0ea' : '#fff',
-                    color: selected.includes(a.label) ? '#2a5c45' : '#5a7a6a',
-                    fontWeight: selected.includes(a.label) ? 500 : 400,
-                    fontSize: 12, cursor: 'pointer', fontFamily: 'inherit', transition: 'all 0.12s'
-                  }}
-                >
-                  {a.icon} {a.label}
-                </button>
-              ))}
-            </div>
-
-            <div style={{ background: '#fff', border: '1.5px solid #e0d8c8', borderRadius: 14, padding: 14, marginBottom: 14 }}>
-              <label style={{ fontSize: 11, color: '#5a7a6a', fontWeight: 500, display: 'block', marginBottom: 6 }}>Or describe in your own words</label>
-              <textarea
-                value={symptom}
-                onChange={e => setSymptom(e.target.value)}
-                placeholder="e.g. I've had a tension headache at the base of my skull since this morning..."
-                style={{ width: '100%', border: 'none', outline: 'none', fontSize: 13, fontFamily: 'inherit', color: '#1a3328', resize: 'none', minHeight: 64, background: 'transparent', lineHeight: 1.6 }}
-              />
-              <div style={{ display: 'flex', alignItems: 'center', gap: 7, marginTop: 10, paddingTop: 10, borderTop: '0.5px solid #e0d8c8' }}>
-                <span style={{ fontSize: 11, color: '#5a7a6a', fontWeight: 500 }}>Severity:</span>
-                {['Mild', 'Moderate', 'Severe'].map(s => (
-                  <button
-                    key={s}
-                    onClick={() => setSeverity(s.toLowerCase())}
-                    style={{
-                      fontSize: 11, padding: '4px 10px', borderRadius: 20, cursor: 'pointer', fontFamily: 'inherit',
-                      border: severity === s.toLowerCase() ? '1px solid #3d8c6a' : '1px solid #e0d8c8',
-                      background: severity === s.toLowerCase() ? '#e8f0ea' : '#fff',
-                      color: severity === s.toLowerCase() ? '#2a5c45' : '#5a7a6a',
-                      fontWeight: severity === s.toLowerCase() ? 500 : 400
-                    }}
-                  >{s}</button>
-                ))}
-              </div>
-            </div>
-
-            <button
-              onClick={findRemedies}
-              disabled={loading || (!selected.length && !symptom.trim())}
-              style={{
-                width: '100%', background: loading ? '#7aaa94' : '#2a5c45', color: '#fff',
-                border: 'none', borderRadius: 12, padding: 13, fontSize: 14, fontWeight: 500,
-                cursor: loading ? 'not-allowed' : 'pointer', fontFamily: 'inherit',
-                display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, marginBottom: 24
-              }}
-            >
-              <HerbIcon size={15} color="#fff" />
-              {loading ? 'Finding remedies...' : 'Find my holistic remedies'}
-            </button>
-
-            {error && <p style={{ color: '#E24B4A', fontSize: 13, marginBottom: 16 }}>{error}</p>}
-
-            {/* Skeletons */}
-            {loading && (
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
-                {[1,2,3,4].map(i => (
-                  <div key={i} style={{ background: '#2a5c45', borderRadius: 12, padding: 14, minHeight: 120, opacity: 0.5 }}>
-                    <div style={{ width: 32, height: 32, borderRadius: 9, background: 'rgba(255,255,255,0.1)', marginBottom: 8 }} />
-                    <div style={{ width: '70%', height: 12, background: 'rgba(255,255,255,0.15)', borderRadius: 6, marginBottom: 6 }} />
-                    <div style={{ width: '40%', height: 10, background: 'rgba(255,255,255,0.1)', borderRadius: 6, marginBottom: 8 }} />
-                    <div style={{ width: '100%', height: 10, background: 'rgba(255,255,255,0.1)', borderRadius: 6, marginBottom: 4 }} />
-                    <div style={{ width: '80%', height: 10, background: 'rgba(255,255,255,0.1)', borderRadius: 6 }} />
-                  </div>
-                ))}
-              </div>
-            )}
-
-            {results && (
-              <>
-                <div style={{ fontSize: 12, fontWeight: 600, color: '#2a5c45', letterSpacing: '0.06em', textTransform: 'uppercase', marginBottom: 12, display: 'flex', alignItems: 'center', gap: 8 }}>
-                  Recommended for you
-                  <div style={{ flex: 1, height: '0.5px', background: '#e0d8c8' }} />
-                </div>
-                <p style={{ fontSize: 13, color: '#5a7a6a', fontWeight: 500, lineHeight: 1.65, marginBottom: 14 }}>{results.intro}</p>
-                <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
-                  {results.remedies.map((r, i) => (
-                    <div key={i} style={{ background: '#2a5c45', borderRadius: 12, padding: 14 }}>
-                      <div style={{ width: 32, height: 32, borderRadius: 9, background: 'rgba(255,255,255,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 8 }}>
-                        <RemedyIcon type={r.type} size={16} />
-                      </div>
-                      <div style={{ fontSize: 12, fontWeight: 500, color: '#fff', marginBottom: 3 }}>{r.name}</div>
-                      <span style={{ fontSize: 10, display: 'inline-block', padding: '2px 6px', borderRadius: 6, marginBottom: 5, background: typeStyle[r.type]?.bg || 'rgba(232,240,234,0.2)', color: typeStyle[r.type]?.color || '#a8d4be' }}>{r.type}</span>
-                      <div style={{ fontSize: 11, color: '#a8d4be', lineHeight: 1.5 }}>{r.how}</div>
-                    </div>
-                  ))}
-                </div>
-                <p style={{ fontSize: 11, color: '#8aad96', marginTop: 16, lineHeight: 1.6 }}>Not medical advice. Always consult a healthcare provider for ongoing or serious symptoms.</p>
-              </>
-            )}
+          {/* Welcome */}
+          <div style={{ marginBottom: 40 }}>
+            <h1 style={{ fontSize: 36, fontWeight: 400, color: '#1a3328', marginBottom: 8, letterSpacing: '-0.3px', fontStyle: 'italic' }}>
+              {greeting()}, <span style={{ color: '#3d8c6a' }}>{profile?.name || 'there'}</span>
+            </h1>
+            <p style={{ fontSize: 15, color: '#5a7a6a' }}>Your personalized holistic wellness hub. What would you like to work on today?</p>
           </div>
 
-          {/* Right panel */}
-          <div style={{ padding: '24px 20px', display: 'flex', flexDirection: 'column', gap: 16 }}>
-
-            {/* Profile */}
-            <div style={{ background: '#fff', border: '0.5px solid #e0d8c8', borderRadius: 14, overflow: 'hidden' }}>
-              <div style={{ padding: '12px 14px', borderBottom: '0.5px solid #e0d8c8', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                <span style={{ fontSize: 12, fontWeight: 600, color: '#1a3328' }}>Your profile</span>
-                <Link href="/onboarding" style={{ fontSize: 11, color: '#3d8c6a', textDecoration: 'none' }}>Edit</Link>
+          {/* Usage bar — only for free users */}
+          {!isPro && (
+            <div style={{ background: '#fff', border: '0.5px solid #e0d8c8', borderRadius: 14, padding: '16px 20px', marginBottom: 36, display: 'flex', alignItems: 'center', gap: 16 }}>
+              <div style={{ flex: 1 }}>
+                <div style={{ fontSize: 13, fontWeight: 500, color: '#1a3328', marginBottom: 2 }}>Free remedy searches</div>
+                <div style={{ fontSize: 11, color: '#8aad96' }}>3 per month included</div>
+                <div style={{ marginTop: 8, height: 6, background: '#e8f0ea', borderRadius: 10, overflow: 'hidden' }}>
+                  <div style={{ height: 6, background: '#3d8c6a', borderRadius: 10, width: '0%' }} />
+                </div>
               </div>
-              <div style={{ padding: '12px 14px' }}>
-                {profile ? (
-                  <>
-                    {[
-                      { key: 'Name', val: profile.name || '—' },
-                      { key: 'Age range', val: profile.age_range || '—' },
-                      { key: 'Goals', val: profile.goals?.join(', ') || '—' },
-                      { key: 'Diet', val: profile.diet || '—' },
-                      { key: 'Stress', val: profile.stress_level ? `${profile.stress_level} / 10` : '—' },
-                      { key: 'Allergies', val: profile.allergies?.length ? profile.allergies.join(', ') : 'None' },
-                      { key: 'Medications', val: profile.medications?.length ? profile.medications.join(', ') : 'None' },
-                    ].map(row => (
-                      <div key={row.key} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '5px 0', borderBottom: '0.5px solid #f5f0e8', fontSize: 11 }}>
-                        <span style={{ color: '#5a7a6a', fontWeight: 500 }}>{row.key}</span>
-                        <span style={{ color: '#1a3328', fontWeight: 500, textAlign: 'right', maxWidth: 120 }}>{row.val}</span>
-                      </div>
-                    ))}
-                  </>
-                ) : (
-                  <p style={{ fontSize: 12, color: '#8aad96', textAlign: 'center', padding: '8px 0' }}>Loading profile...</p>
-                )}
-              </div>
+              <div style={{ fontSize: 15, fontWeight: 500, color: '#1a3328', whiteSpace: 'nowrap' }}>0 <span style={{ fontSize: 12, fontWeight: 400, color: '#8aad96' }}>/ 3</span></div>
+              <button
+                onClick={async () => {
+                  const res = await fetch('/api/checkout', { method: 'POST' })
+                  const data = await res.json()
+                  if (data.url) window.location.href = data.url
+                }}
+                style={{ background: '#2a5c45', color: '#fff', border: 'none', borderRadius: 20, padding: '7px 14px', fontSize: 11, fontWeight: 500, cursor: 'pointer', whiteSpace: 'nowrap', fontFamily: 'inherit' }}
+              >
+                Upgrade for unlimited →
+              </button>
             </div>
+          )}
 
-            {/* Free features */}
-            <div style={{ background: '#fff', border: '0.5px solid #e0d8c8', borderRadius: 14, overflow: 'hidden' }}>
-              <div style={{ padding: '12px 14px', borderBottom: '0.5px solid #e0d8c8' }}>
-                <span style={{ fontSize: 12, fontWeight: 600, color: '#1a3328' }}>Free features</span>
-              </div>
-              <div style={{ padding: '12px 14px' }}>
-                {[
-                  { name: 'Supplement tracker', desc: 'Log your daily stack', href: '/tracker', bg: '#e8f0ea', icon: <svg viewBox="0 0 24 24" fill="none" width="15" height="15"><rect x="4" y="3" width="16" height="18" rx="3" stroke="#3d8c6a" strokeWidth="1.8"/><path d="M8 8h8M8 12h5" stroke="#3d8c6a" strokeWidth="1.6" strokeLinecap="round"/><path d="M7 16l1 1 2-2" stroke="#3d8c6a" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round"/></svg> },
-                  { name: 'Encyclopedia', desc: 'Look up any herb or supplement', href: '/encyclopedia', bg: '#e8f0ea', icon: <svg viewBox="0 0 24 24" fill="none" width="15" height="15"><path d="M12 3L4 6v7c0 4 3.5 7.5 8 9 4.5-1.5 8-5 8-9V6l-8-3z" stroke="#3d8c6a" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/><path d="M12 8v4" stroke="#3d8c6a" strokeWidth="1.8" strokeLinecap="round"/><circle cx="12" cy="15" r="1" fill="#3d8c6a"/></svg> },
-                ].map(f => (
-                  <Link key={f.name} href={f.href} style={{ textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 10, padding: '9px 0', borderBottom: '0.5px solid #f5f0e8' }}>
-                    <div style={{ width: 30, height: 30, borderRadius: 9, background: f.bg, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>{f.icon}</div>
-                    <div>
-                      <div style={{ fontSize: 12, fontWeight: 500, color: '#1a3328' }}>{f.name}</div>
-                      <div style={{ fontSize: 11, color: '#5a7a6a', fontWeight: 500, marginTop: 1 }}>{f.desc}</div>
-                    </div>
-                    <span style={{ marginLeft: 'auto', color: '#8aad96', fontSize: 14 }}>→</span>
-                  </Link>
-                ))}
-              </div>
-            </div>
-
-            {/* Recent searches */}
-            <div style={{ background: '#fff', border: '0.5px solid #e0d8c8', borderRadius: 14, overflow: 'hidden' }}>
-              <div style={{ padding: '12px 14px', borderBottom: '0.5px solid #e0d8c8' }}>
-                <span style={{ fontSize: 12, fontWeight: 600, color: '#1a3328' }}>Recent searches</span>
-              </div>
-              <div style={{ padding: '12px 14px' }}>
-                {results ? (
-                  <div style={{ display: 'flex', alignItems: 'center', gap: 8, padding: '6px 0', fontSize: 11 }}>
-                    <div style={{ width: 6, height: 6, borderRadius: '50%', background: '#3d8c6a', flexShrink: 0 }} />
-                    <span style={{ color: '#1a3328', fontWeight: 500, flex: 1 }}>{selected.length ? selected.join(', ') : symptom.slice(0, 30)}</span>
-                    <span style={{ color: '#5a7a6a', fontWeight: 500 }}>Just now</span>
+          {/* Free tools */}
+          <p style={{ fontSize: 12, fontWeight: 600, color: '#2a5c45', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 14 }}>Where would you like to start?</p>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 12, marginBottom: 32 }}>
+            {freeTools.map(t => (
+              <Link key={t.title} href={t.href} style={{ textDecoration: 'none' }}>
+                <div style={{ background: '#2a5c45', borderRadius: 16, padding: 22, cursor: 'pointer', height: '100%', transition: 'background 0.15s' }}>
+                  <div style={{ width: 36, height: 36, borderRadius: 10, background: 'rgba(255,255,255,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 14 }}>
+                    {t.icon}
                   </div>
-                ) : (
-                  <p style={{ fontSize: 12, color: '#8aad96', textAlign: 'center', padding: '8px 0' }}>No searches yet</p>
-                )}
-              </div>
-            </div>
-
+                  <div style={{ fontSize: 15, fontWeight: 500, color: '#fff', marginBottom: 4 }}>{t.title}</div>
+                  <div style={{ fontSize: 12, color: '#a8d4be', lineHeight: 1.5 }}>{t.desc}</div>
+                </div>
+              </Link>
+            ))}
           </div>
-        </div>
+
+          {/* Pro tools */}
+          <p style={{ fontSize: 12, fontWeight: 600, color: '#2a5c45', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 14 }}>Pro features</p>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 12, marginBottom: 40 }}>
+            {proTools.map(t => (
+              <Link key={t.title} href={t.href} style={{ textDecoration: 'none' }}>
+                <div style={{ background: isPro ? '#2a5c45' : '#1e3d2e', borderRadius: 16, padding: 22, cursor: isPro ? 'pointer' : 'default', height: '100%', opacity: isPro ? 1 : 0.6, position: 'relative' }}>
+                  {!isPro && (
+                    <div style={{ position: 'absolute', top: 14, right: 14 }}>{lockIcon}</div>
+                  )}
+                  <div style={{ width: 36, height: 36, borderRadius: 10, background: 'rgba(255,255,255,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 14 }}>
+                    {t.icon}
+                  </div>
+                  <div style={{ fontSize: 15, fontWeight: 500, color: '#fff', marginBottom: 4 }}>{t.title}</div>
+                  <div style={{ fontSize: 12, color: '#a8d4be', lineHeight: 1.5 }}>{t.desc}</div>
+                </div>
+              </Link>
+            ))}
+          </div>
+
+          {/* Profile summary */}
+          {profile && (
+            <>
+              <p style={{ fontSize: 12, fontWeight: 600, color: '#2a5c45', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 14 }}>Your wellness profile</p>
+              <div style={{ background: '#fff', border: '0.5px solid #e0d8c8', borderRadius: 16, padding: '20px 24px' }}>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
+                  <span style={{ fontSize: 13, fontWeight: 600, color: '#1a3328' }}>Personalized to you</span>
+                  <Link href="/onboarding" style={{ fontSize: 11, color: '#3d8c6a', textDecoration: 'none' }}>Edit profile →</Link>
+                </div>
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+                  {profile.age_range && <span style={{ fontSize: 12, background: '#faf8f3', border: '0.5px solid #e0d8c8', color: '#5a7a6a', padding: '5px 12px', borderRadius: 20 }}>Age {profile.age_range}</span>}
+                  {profile.stress_level && <span style={{ fontSize: 12, background: '#faf8f3', border: '0.5px solid #e0d8c8', color: '#5a7a6a', padding: '5px 12px', borderRadius: 20 }}>Stress level {profile.stress_level}/10</span>}
+                  {profile.diet && <span style={{ fontSize: 12, background: '#faf8f3', border: '0.5px solid #e0d8c8', color: '#5a7a6a', padding: '5px 12px', borderRadius: 20 }}>{profile.diet}</span>}
+                  {profile.goals?.map(g => <span key={g} style={{ fontSize: 12, background: '#faf8f3', border: '0.5px solid #e0d8c8', color: '#5a7a6a', padding: '5px 12px', borderRadius: 20 }}>Goal: {g}</span>)}
+                  {profile.allergies?.length ? profile.allergies.map(a => <span key={a} style={{ fontSize: 12, background: '#faf8f3', border: '0.5px solid #e0d8c8', color: '#5a7a6a', padding: '5px 12px', borderRadius: 20 }}>Allergy: {a}</span>) : <span style={{ fontSize: 12, background: '#faf8f3', border: '0.5px solid #e0d8c8', color: '#5a7a6a', padding: '5px 12px', borderRadius: 20 }}>No allergies</span>}
+                  {profile.medications?.length ? profile.medications.map(m => <span key={m} style={{ fontSize: 12, background: '#faf8f3', border: '0.5px solid #e0d8c8', color: '#5a7a6a', padding: '5px 12px', borderRadius: 20 }}>Medication: {m}</span>) : <span style={{ fontSize: 12, background: '#faf8f3', border: '0.5px solid #e0d8c8', color: '#5a7a6a', padding: '5px 12px', borderRadius: 20 }}>No medications</span>}
+                </div>
+              </div>
+            </>
+          )}
+        </main>
       </div>
     </div>
   )
