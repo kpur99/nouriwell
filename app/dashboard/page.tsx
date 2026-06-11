@@ -175,7 +175,7 @@ export default function Dashboard() {
                   <div style={{ height: 6, background: '#3d8c6a', borderRadius: 10, width: `${(searchCount / 3) * 100}%` }} />
                 </div>
               </div>
-              <div style={{ fontSize: 15, fontWeight: 500, color: '#1a3328', whiteSpace: 'nowrap' }}>0 <span style={{ fontSize: 12, fontWeight: 400, color: '#8aad96' }}>/ 3</span></div>
+              <div style={{ fontSize: 15, fontWeight: 500, color: '#1a3328', whiteSpace: 'nowrap' }}>{searchCount} <span style={{ fontSize: 12, fontWeight: 400, color: '#8aad96' }}>/ 3</span></div>
               <button
                 onClick={async () => {
                   const res = await fetch('/api/checkout', { method: 'POST' })
