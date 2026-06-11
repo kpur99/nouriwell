@@ -36,10 +36,10 @@ export default function Signup() {
     <div className="min-h-screen bg-[#f4faf7] font-sans flex flex-col">
       <nav className="bg-white border-b border-[#d4ede2] px-6 h-16 flex items-center">
         <Link href="/" className="flex items-center gap-3 no-underline">
-          <div className="w-9 h-9 rounded-xl bg-[#1D9E75] flex items-center justify-center">
-            <svg width="22" height="22" viewBox="0 0 34 34" fill="none">
+          <div style={{ width: 34, height: 34, borderRadius: '50%', background: '#2a5c45', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <svg width="20" height="20" viewBox="0 0 34 34" fill="none">
               <path d="M17 4C17 4 9 11 9 19a8 8 0 0016 0c0-8-8-15-8-15z" fill="#fff" opacity=".95"/>
-              <path d="M17 12C17 12 13 16 13 20a4 4 0 008 0c0-4-4-8-4-8z" fill="#0F6E56" opacity=".4"/>
+              <path d="M17 12C17 12 13 16 13 20a4 4 0 008 0c0-4-4-8-4-8z" fill="#fff" opacity=".4"/>
               <path d="M17 24v5" stroke="#fff" strokeWidth="1.8" strokeLinecap="round"/>
             </svg>
           </div>
