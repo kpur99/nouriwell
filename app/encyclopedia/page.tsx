@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import Sidebar from '../components/Sidebar'
+import MedicalDisclaimer from '../components/MedicalDisclaimer'
 import { supabase, getUserAccess } from '../../lib/supabase'
 
 const BROWSE = [
@@ -137,6 +138,7 @@ export default function Encyclopedia() {
       </div>
 
       <div className="max-w-4xl mx-auto px-6 py-10">
+        <MedicalDisclaimer style={{ marginBottom: 24 }} />
 
         {/* Entry result */}
         {entry && (

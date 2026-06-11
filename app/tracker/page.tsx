@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { SupplementIcon } from '../components/NouriIcons'
 import Sidebar from '../components/Sidebar'
+import MedicalDisclaimer from '../components/MedicalDisclaimer'
 import { supabase, getUserAccess } from '../../lib/supabase'
 
 interface Supplement {
@@ -128,6 +129,7 @@ export default function Tracker() {
       </div>
 
       <div className="max-w-3xl mx-auto px-6 py-10">
+        <MedicalDisclaimer style={{ marginBottom: 24 }} />
 
         {/* Progress */}
         <div className="bg-white border border-[#d4ede2] rounded-2xl p-6 mb-6">

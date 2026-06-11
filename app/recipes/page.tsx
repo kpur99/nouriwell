@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import Sidebar from '../components/Sidebar'
+import MedicalDisclaimer from '../components/MedicalDisclaimer'
 import { supabase, getUserAccess } from '../../lib/supabase'
 
 const GOALS = ['Reduce inflammation', 'Better sleep', 'More energy', 'Gut health', 'Hormonal balance', 'Immune support', 'Stress relief', 'Brain clarity']
@@ -114,6 +115,7 @@ export default function Recipes() {
       </div>
 
       <div className="max-w-3xl mx-auto px-6 py-10">
+        <MedicalDisclaimer style={{ marginBottom: 24 }} />
         <div className="bg-white border border-[#d4ede2] rounded-2xl p-6 mb-8">
           <p className="text-sm font-medium text-[#7aaa94] uppercase tracking-widest mb-4">What are you eating for?</p>
 

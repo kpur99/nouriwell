@@ -4,6 +4,7 @@ import Link from 'next/link'
 import { supabase, getUserAccess } from '../../lib/supabase'
 import { HerbIcon } from '../components/NouriIcons'
 import Sidebar from '../components/Sidebar'
+import MedicalDisclaimer from '../components/MedicalDisclaimer'
 
 interface Profile {
   name: string
@@ -244,6 +245,8 @@ export default function Dashboard() {
               </div>
             </>
           )}
+
+          <MedicalDisclaimer compact style={{ marginTop: 40 }} />
         </main>
       </div>
     </div>

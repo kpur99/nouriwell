@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import Sidebar from '../components/Sidebar'
+import MedicalDisclaimer from '../components/MedicalDisclaimer'
 import { CycleSyncingIcon } from '../components/NouriIcons'
 import { supabase, getUserAccess } from '../../lib/supabase'
 
@@ -114,6 +115,7 @@ export default function Cycle() {
       </div>
 
       <div className="max-w-3xl mx-auto px-6 py-10">
+        <MedicalDisclaimer style={{ marginBottom: 24 }} />
 
         {/* Phase selector */}
         <div className="bg-white border border-[#d4ede2] rounded-2xl p-6 mb-6">

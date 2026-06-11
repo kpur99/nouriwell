@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import { supabase } from '../../lib/supabase'
 import Sidebar from '../components/Sidebar'
+import MedicalDisclaimer from '../components/MedicalDisclaimer'
 import {
   HeadacheIcon, StomachAcheIcon, AnxietyIcon, BrainFogIcon,
   PoorSleepIcon, LowEnergyIcon, MusclePainIcon, BloatingIcon,
@@ -237,6 +238,8 @@ export default function RemedyFinder() {
               </div>
             </div>
 
+            <MedicalDisclaimer style={{ marginBottom: 14 }} />
+
             <button
               onClick={findRemedies}
               disabled={loading || (!selected.length && !symptom.trim())}
@@ -306,7 +309,7 @@ export default function RemedyFinder() {
                     </div>
                   ))}
                 </div>
-                <p style={{ fontSize: 11, color: '#8aad96', marginTop: 16, lineHeight: 1.6 }}>Not medical advice. Always consult a healthcare provider for ongoing or serious symptoms.</p>
+                <MedicalDisclaimer style={{ marginTop: 16 }} />
               </>
             )}
           </div>
