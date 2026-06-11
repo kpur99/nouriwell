@@ -63,15 +63,25 @@ export default function Onboarding() {
         return
       }
       const user = session.user
-      const { error } = await supabase.from('profiles').upsert({
+      console.log('Saving profile for user:', user.id)
+      console.log('Answers:', answers)
+
+      const { data, error } = await supabase.from('profiles').upsert({
         id: user.id,
-        ...answers
+        name: answers.name,
+        age_range: answers.age_range,
+        goals: answers.goals,
+        diet: answers.diet,
+        stress_level: answers.stress_level,
+        allergies: answers.allergies,
+        medications: answers.medications,
+        pregnant: answers.pregnant,
       }, { onConflict: 'id' })
 
-      if (error) console.error('Profile save error:', error)
+      console.log('Upsert result:', data, 'Error:', error)
       router.push('/dashboard')
     } catch (e) {
-      console.error(e)
+      console.error('Finish error:', e)
       router.push('/dashboard')
     }
     setLoading(false)
