@@ -70,6 +70,7 @@ function RemedyIcon({ type, size = 16 }: { type: string; size?: number }) {
 }
 
 export default function RemedyFinder() {
+  const [searchCount, setSearchCount] = useState(0)
   const [profile, setProfile] = useState<Profile | null>(null)
   const [isPro, setIsPro] = useState(true)
   const [selected, setSelected] = useState<string[]>([])
@@ -84,7 +85,10 @@ export default function RemedyFinder() {
       const { data: { user } } = await supabase.auth.getUser()
       if (user) {
         const { data } = await supabase.from('profiles').select('*').eq('id', user.id).single()
-        if (data) setProfile(data)
+        if (data) {
+          setProfile(data)
+          setSearchCount(data?.remedy_searches_count || 0)
+        }
         const { data: profile } = await supabase.from('profiles').select('is_beta').eq('id', user.id).single()
         setIsPro(profile?.is_beta === true)
       }
@@ -111,8 +115,14 @@ export default function RemedyFinder() {
         body: JSON.stringify({ symptom: query + '. Severity: ' + severity, profile: profile || {} })
       })
       const data = await res.json()
-      if (data.error) setError(data.error)
-      else setResults(data)
+      if (data.error === 'limit_reached') {
+        setError('limit_reached')
+      } else if (data.error) {
+        setError(data.error)
+      } else {
+        setResults(data)
+        setSearchCount(c => c + 1)
+      }
     } catch {
       setError('Something went wrong. Please try again.')
     }
@@ -168,6 +178,11 @@ export default function RemedyFinder() {
             <div style={{ marginBottom: 24 }}>
               <h1 style={{ fontSize: 26, fontWeight: 500, color: '#1a3328', marginBottom: 4 }}>What are you experiencing?</h1>
               <p style={{ fontSize: 13, color: '#5a7a6a', fontWeight: 500, lineHeight: 1.5 }}>Select a concern or describe your symptoms — recommendations are tailored to your profile.</p>
+              {!isPro && (
+                <p style={{ fontSize: 12, color: '#8aad96', marginTop: 8 }}>
+                  {searchCount} of 3 free searches used this month
+                </p>
+              )}
             </div>
 
             <p style={{ fontSize: 12, fontWeight: 600, color: '#2a5c45', letterSpacing: '0.06em', textTransform: 'uppercase', marginBottom: 10 }}>Quick select</p>
@@ -230,7 +245,27 @@ export default function RemedyFinder() {
               {loading ? 'Finding remedies...' : 'Find my holistic remedies'}
             </button>
 
-            {error && <p style={{ color: '#E24B4A', fontSize: 13, marginBottom: 16 }}>{error}</p>}
+            {error === 'limit_reached' ? (
+              <div style={{ background: '#1e3d2e', borderRadius: 16, padding: 28, textAlign: 'center', marginBottom: 16 }}>
+                <div style={{ fontSize: 32, marginBottom: 12 }}>🌿</div>
+                <h3 style={{ fontSize: 18, fontWeight: 500, color: '#fff', marginBottom: 8 }}>Monthly limit reached</h3>
+                <p style={{ fontSize: 13, color: '#a8d4be', lineHeight: 1.6, marginBottom: 20 }}>
+                  You've used all 3 free remedy searches this month. Upgrade to Pro for unlimited searches, plus cycle syncing, healing recipes, and more.
+                </p>
+                <button
+                  onClick={async () => {
+                    const res = await fetch('/api/checkout', { method: 'POST' })
+                    const data = await res.json()
+                    if (data.url) window.location.href = data.url
+                  }}
+                  style={{ background: '#3d8c6a', color: '#fff', border: 'none', borderRadius: 12, padding: '12px 28px', fontSize: 14, fontWeight: 500, cursor: 'pointer', fontFamily: 'inherit' }}
+                >
+                  Upgrade to Pro — $12/mo
+                </button>
+              </div>
+            ) : error ? (
+              <p style={{ color: '#E24B4A', fontSize: 13, marginBottom: 16 }}>{error}</p>
+            ) : null}
 
             {loading && (
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
@@ -272,6 +307,15 @@ export default function RemedyFinder() {
 
           {/* Right panel */}
           <div style={{ padding: '24px 20px', display: 'flex', flexDirection: 'column', gap: 16 }}>
+            {!isPro && (
+              <div style={{ background: '#fff', border: '0.5px solid #e0d8c8', borderRadius: 14, padding: '14px 16px', marginBottom: 0 }}>
+                <div style={{ fontSize: 12, fontWeight: 600, color: '#1a3328', marginBottom: 8 }}>Free searches</div>
+                <div style={{ height: 6, background: '#e8f0ea', borderRadius: 10, overflow: 'hidden', marginBottom: 6 }}>
+                  <div style={{ height: 6, background: '#3d8c6a', borderRadius: 10, width: `${(searchCount / 3) * 100}%`, transition: 'width 0.3s' }} />
+                </div>
+                <div style={{ fontSize: 11, color: '#8aad96' }}>{searchCount} of 3 used this month</div>
+              </div>
+            )}
             <div style={{ background: '#fff', border: '0.5px solid #e0d8c8', borderRadius: 14, overflow: 'hidden' }}>
               <div style={{ padding: '12px 14px', borderBottom: '0.5px solid #e0d8c8', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                 <span style={{ fontSize: 12, fontWeight: 600, color: '#1a3328' }}>Your profile</span>
