@@ -30,7 +30,7 @@ export async function POST(req: NextRequest) {
           </div>
         </div>
       `,
-      reply_to: email,
+      replyTo: email,
     })
 
     return new Response(JSON.stringify({ success: true }), { status: 200 })
