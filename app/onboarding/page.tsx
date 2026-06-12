@@ -56,13 +56,12 @@ export default function Onboarding() {
   async function finish() {
     setLoading(true)
     try {
-      const { data: { session } } = await supabase.auth.getSession()
-      if (!session) {
-        router.push('/login')
+      const { data: { user } } = await supabase.auth.getUser()
+      if (!user) {
+        window.location.href = '/login'
         setLoading(false)
         return
       }
-      const user = session.user
       console.log('Saving profile for user:', user.id)
       console.log('Answers:', answers)
 
@@ -79,10 +78,10 @@ export default function Onboarding() {
       }, { onConflict: 'id' })
 
       console.log('Upsert result:', data, 'Error:', error)
-      router.push('/dashboard')
+      window.location.href = '/dashboard'
     } catch (e) {
       console.error('Finish error:', e)
-      router.push('/dashboard')
+      window.location.href = '/dashboard'
     }
     setLoading(false)
   }
