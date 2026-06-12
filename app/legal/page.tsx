@@ -2,70 +2,251 @@
 import { useState } from 'react'
 import Link from 'next/link'
 
+function LegalBlock({ heading, children }: { heading: string; children: React.ReactNode }) {
+  return (
+    <div style={{ marginBottom: 20 }}>
+      <h3 style={{ fontSize: 13, fontWeight: 600, color: '#2a5c45', marginBottom: 8, letterSpacing: '0.02em' }}>{heading}</h3>
+      <div style={{ fontSize: 14, color: '#5a7a6a', lineHeight: 1.7 }}>{children}</div>
+    </div>
+  )
+}
+
+function LegalList({ items }: { items: string[] }) {
+  return (
+    <ul style={{ margin: '8px 0 0', paddingLeft: 20 }}>
+      {items.map(item => (
+        <li key={item} style={{ marginBottom: 6 }}>{item}</li>
+      ))}
+    </ul>
+  )
+}
+
+function PrivacyContent() {
+  return (
+    <>
+      <LegalBlock heading="1. Who We Are">
+        Nouriwell (&quot;we,&quot; &quot;us,&quot; or &quot;our&quot;) is a holistic wellness platform operated as a sole proprietorship. You can contact us at hello@nouriwell.co.
+      </LegalBlock>
+      <LegalBlock heading="2. What Information We Collect">
+        We collect information you provide directly:
+        <LegalList items={[
+          'Name and email address when you create an account',
+          'Wellness profile data including age range, health goals, dietary preferences, stress level, allergies, and current medications',
+          'Symptoms and health concerns you enter when using the remedy finder',
+          'Payment information (processed securely by Stripe — we never store your card details)',
+        ]} />
+        We automatically collect:
+        <LegalList items={[
+          'Usage data such as features accessed and search history',
+          'Device and browser information',
+        ]} />
+      </LegalBlock>
+      <LegalBlock heading="3. How We Use Your Information">
+        We use your information to:
+        <LegalList items={[
+          'Provide personalized holistic remedy recommendations',
+          'Operate and improve the Nouriwell platform',
+          'Process your subscription payments',
+          'Send you account-related emails',
+          'Respond to your support requests',
+        ]} />
+      </LegalBlock>
+      <LegalBlock heading="4. Health Information">
+        You may choose to share sensitive health information including symptoms, medications, and allergies. This information is used solely to personalize your experience on Nouriwell. We do not sell, share, or disclose your health information to third parties except as described in this policy.
+      </LegalBlock>
+      <LegalBlock heading="5. Who We Share Your Information With">
+        We share your data only with:
+        <LegalList items={[
+          'Supabase — our database provider (data storage)',
+          'Stripe — our payment processor (billing only)',
+          'Anthropic — AI provider that powers remedy recommendations (your symptom queries are processed to generate responses)',
+          'Resend — email delivery service',
+        ]} />
+        We do not sell your personal information to anyone, ever.
+      </LegalBlock>
+      <LegalBlock heading="6. Data Retention">
+        We retain your data for as long as your account is active. You can delete your account at any time from your profile page, which permanently deletes all your data.
+      </LegalBlock>
+      <LegalBlock heading="7. Your Rights">
+        You have the right to:
+        <LegalList items={[
+          'Access the data we hold about you',
+          'Correct inaccurate data',
+          'Delete your account and all associated data',
+          'Export your data by contacting us',
+        ]} />
+      </LegalBlock>
+      <LegalBlock heading="8. Children's Privacy">
+        Nouriwell is not intended for children under 13. We do not knowingly collect data from children under 13.
+      </LegalBlock>
+      <LegalBlock heading="9. Changes to This Policy">
+        We may update this policy from time to time. We&apos;ll notify you of significant changes by email.
+      </LegalBlock>
+      <LegalBlock heading="10. Contact Us">
+        Questions about this privacy policy? Email us at hello@nouriwell.co
+      </LegalBlock>
+    </>
+  )
+}
+
+function TermsContent() {
+  return (
+    <>
+      <LegalBlock heading="1. Acceptance of Terms">
+        By creating an account or using Nouriwell, you agree to these Terms of Service. If you do not agree, please do not use our service.
+      </LegalBlock>
+      <LegalBlock heading="2. Description of Service">
+        Nouriwell is an AI-powered holistic wellness platform that provides general wellness information, remedy suggestions, and health resources. Nouriwell is NOT a medical provider, healthcare service, or pharmacy.
+      </LegalBlock>
+      <LegalBlock heading="3. Medical Disclaimer">
+        <p style={{ fontWeight: 600, color: '#1a3328', margin: '0 0 8px' }}>
+          THE INFORMATION PROVIDED BY NOURIWELL IS FOR GENERAL WELLNESS AND INFORMATIONAL PURPOSES ONLY. IT IS NOT INTENDED TO BE A SUBSTITUTE FOR PROFESSIONAL MEDICAL ADVICE, DIAGNOSIS, OR TREATMENT. ALWAYS SEEK THE ADVICE OF YOUR PHYSICIAN OR OTHER QUALIFIED HEALTH PROVIDER WITH ANY QUESTIONS YOU MAY HAVE REGARDING A MEDICAL CONDITION. NEVER DISREGARD PROFESSIONAL MEDICAL ADVICE OR DELAY SEEKING IT BECAUSE OF SOMETHING YOU HAVE READ OR RECEIVED FROM NOURIWELL.
+        </p>
+      </LegalBlock>
+      <LegalBlock heading="4. Subscription and Billing">
+        <LegalList items={[
+          'The free Seed plan includes 3 remedy searches per month',
+          'The Root Pro plan is $12/month and includes unlimited searches and all Pro features',
+          'Subscriptions automatically renew monthly until cancelled',
+          'You may cancel at any time — your Pro access continues until the end of your current billing period',
+          'We do not offer refunds for partial months',
+        ]} />
+      </LegalBlock>
+      <LegalBlock heading="5. Account Responsibilities">
+        You are responsible for:
+        <LegalList items={[
+          'Maintaining the security of your account password',
+          'All activity that occurs under your account',
+          'Providing accurate information',
+        ]} />
+      </LegalBlock>
+      <LegalBlock heading="6. Prohibited Uses">
+        You may not:
+        <LegalList items={[
+          'Use Nouriwell for any unlawful purpose',
+          'Attempt to gain unauthorized access to any part of the service',
+          'Share your account with others',
+          'Use the service to harm yourself or others',
+        ]} />
+      </LegalBlock>
+      <LegalBlock heading="7. Intellectual Property">
+        All content, features, and functionality of Nouriwell are owned by Nouriwell and protected by copyright law. You may not copy, modify, or distribute any part of our service without written permission.
+      </LegalBlock>
+      <LegalBlock heading="8. Limitation of Liability">
+        <p style={{ fontWeight: 600, color: '#1a3328', margin: 0 }}>
+          TO THE MAXIMUM EXTENT PERMITTED BY LAW, NOURIWELL SHALL NOT BE LIABLE FOR ANY INDIRECT, INCIDENTAL, SPECIAL, OR CONSEQUENTIAL DAMAGES ARISING FROM YOUR USE OF THE SERVICE. OUR TOTAL LIABILITY SHALL NOT EXCEED THE AMOUNT YOU PAID US IN THE PAST 12 MONTHS.
+        </p>
+      </LegalBlock>
+      <LegalBlock heading="9. Indemnification">
+        You agree to indemnify and hold Nouriwell harmless from any claims, damages, or expenses arising from your use of the service or violation of these terms.
+      </LegalBlock>
+      <LegalBlock heading="10. Termination">
+        We reserve the right to terminate or suspend your account at any time for violation of these terms.
+      </LegalBlock>
+      <LegalBlock heading="11. Governing Law">
+        These terms are governed by the laws of the State of Tennessee.
+      </LegalBlock>
+      <LegalBlock heading="12. Changes to Terms">
+        We may update these terms at any time. Continued use of Nouriwell after changes constitutes acceptance of the new terms.
+      </LegalBlock>
+      <LegalBlock heading="13. Contact">
+        Questions? Email us at hello@nouriwell.co
+      </LegalBlock>
+    </>
+  )
+}
+
+function MedicalContent() {
+  return (
+    <>
+      <p style={{ fontSize: 14, color: '#5a7a6a', lineHeight: 1.7, margin: '0 0 20px' }}>
+        The content provided by Nouriwell, including but not limited to remedy suggestions, supplement recommendations, herbal guidance, and wellness information, is intended for general informational purposes only.
+      </p>
+      <LegalBlock heading="Nouriwell is not:">
+        <LegalList items={[
+          'A licensed medical provider',
+          'A substitute for professional medical advice',
+          'A diagnostic tool',
+          'A treatment service',
+        ]} />
+      </LegalBlock>
+      <LegalBlock heading="Always consult a qualified healthcare provider before:">
+        <LegalList items={[
+          'Starting any new supplement, herb, or essential oil regimen',
+          'Making changes to existing medications or treatments',
+          'Using any remedy if you are pregnant, nursing, or trying to conceive',
+          'Treating any medical condition or symptom',
+          'Giving supplements to children',
+        ]} />
+      </LegalBlock>
+      <LegalBlock heading="Do not use Nouriwell to:">
+        <LegalList items={[
+          'Diagnose or treat any medical condition',
+          'Replace prescribed medications without consulting your doctor',
+          'Address emergency medical situations (call 911 for emergencies)',
+        ]} />
+      </LegalBlock>
+      <p style={{ fontSize: 14, color: '#5a7a6a', lineHeight: 1.7, margin: '0 0 20px' }}>
+        Individual responses to herbs, supplements, and essential oils vary. What works for one person may not work for another and may cause adverse reactions in some individuals. Always start with the lowest recommended dose and monitor your response.
+      </p>
+      <p style={{ fontSize: 14, color: '#5a7a6a', lineHeight: 1.7, margin: 0 }}>
+        The AI-generated recommendations on Nouriwell are based on general wellness research and your self-reported profile. They do not account for your complete medical history and should not be treated as personalized medical advice.
+      </p>
+    </>
+  )
+}
+
+function RefundContent() {
+  return (
+    <>
+      <LegalBlock heading="Subscriptions">
+        Nouriwell Root Pro is billed monthly at $12/month.
+        <LegalList items={[
+          'You may cancel your subscription at any time from your profile page',
+          'Upon cancellation, you retain Pro access until the end of your current billing period',
+          'We do not offer prorated refunds for unused portions of a billing period',
+        ]} />
+      </LegalBlock>
+      <LegalBlock heading="Exceptions">
+        We will issue a full refund in the following cases:
+        <LegalList items={[
+          'You were charged after cancelling due to a technical error on our part',
+          'You were charged twice for the same billing period',
+          'You contact us within 48 hours of your first charge and have not used any Pro features',
+        ]} />
+        To request a refund under these exceptions, email hello@nouriwell.co with your account email and reason for the request.
+      </LegalBlock>
+      <LegalBlock heading="Free Plan">
+        The free Seed plan does not involve any charges and therefore no refund policy applies.
+      </LegalBlock>
+    </>
+  )
+}
+
 const SECTIONS = [
-  {
-    id: 'privacy',
-    title: 'Privacy Policy',
-    lastUpdated: 'May 25, 2026',
-    content: [
-      { heading: 'Information we collect', body: 'When you create a Nouriwell account, we collect your name, email address, and the wellness profile information you provide during onboarding — including age range, health goals, diet preferences, stress level, allergies, and medications. We also collect usage data such as remedy search history and subscription status.' },
-      { heading: 'How we use your information', body: 'Your profile data is used to personalize AI-generated remedy recommendations, recipes, and wellness content. We do not sell your personal information to third parties. We use your email to send account-related communications and, if you opt in, occasional product updates.' },
-      { heading: 'AI and data processing', body: 'When you use features like the Remedy Finder, your symptom descriptions and profile data are sent to our AI provider (Anthropic) to generate personalized responses. This data is processed in accordance with our providers\' privacy policies and is not used to train public AI models.' },
-      { heading: 'Data storage and security', body: 'Your data is stored securely using Supabase, with encryption in transit and at rest. Payment information is handled entirely by Stripe — we never store your credit card details on our servers.' },
-      { heading: 'Your rights', body: 'You can view, update, or delete your profile at any time from your account settings. To request a full data export or deletion, contact us at hello@nouriwell.co. We will respond within 30 days.' },
-      { heading: 'Cookies', body: 'We use essential cookies to maintain your login session. We do not use advertising or third-party tracking cookies.' },
-      { heading: 'Changes to this policy', body: 'We may update this Privacy Policy from time to time. We will notify you of significant changes via email or an in-app notice.' },
-    ],
-  },
-  {
-    id: 'terms',
-    title: 'Terms of Service',
-    lastUpdated: 'May 25, 2026',
-    content: [
-      { heading: 'Acceptance of terms', body: 'By creating an account or using Nouriwell, you agree to these Terms of Service. If you do not agree, please do not use the service.' },
-      { heading: 'Description of service', body: 'Nouriwell is a holistic wellness platform that provides AI-powered remedy recommendations, supplement tracking, an encyclopedia of natural health information, and related wellness tools. Some features require a paid Pro subscription.' },
-      { heading: 'Account responsibilities', body: 'You are responsible for maintaining the confidentiality of your account credentials and for all activity under your account. You agree to provide accurate profile information, especially regarding allergies and medications, as this directly affects the safety of recommendations you receive.' },
-      { heading: 'Acceptable use', body: 'You may not use Nouriwell to seek advice for medical emergencies, distribute harmful content, attempt to reverse-engineer our AI systems, or use automated tools to scrape or overload our services.' },
-      { heading: 'Subscriptions and billing', body: 'Pro subscriptions are billed monthly at the rate displayed at checkout. Subscriptions renew automatically unless cancelled. You can manage or cancel your subscription at any time through your account settings or the Stripe customer portal.' },
-      { heading: 'Intellectual property', body: 'All content, design, and technology on Nouriwell is owned by Nouriwell or its licensors. You may not reproduce, distribute, or create derivative works without our written permission.' },
-      { heading: 'Limitation of liability', body: 'Nouriwell is provided "as is" without warranties of any kind. To the fullest extent permitted by law, we are not liable for any indirect, incidental, or consequential damages arising from your use of the service.' },
-      { heading: 'Termination', body: 'We reserve the right to suspend or terminate accounts that violate these terms. You may delete your account at any time from your profile settings.' },
-    ],
-  },
-  {
-    id: 'medical',
-    title: 'Medical Disclaimer',
-    lastUpdated: 'May 25, 2026',
-    content: [
-      { heading: 'Not medical advice', body: 'Nouriwell is a wellness information platform. Nothing on this site — including AI-generated remedy recommendations, encyclopedia entries, recipes, or hormone balancing guides — constitutes medical advice, diagnosis, or treatment.' },
-      { heading: 'Consult a healthcare provider', body: 'Always consult a qualified healthcare provider before starting any new supplement, herb, essential oil, diet change, or wellness practice — especially if you are pregnant, nursing, taking medications, or have a chronic health condition.' },
-      { heading: 'AI-generated content', body: 'Our AI recommendations are generated based on general holistic health knowledge and your profile information. They are not reviewed by medical professionals and may not be appropriate for your specific situation. Use your own judgment and verify information with trusted sources.' },
-      { heading: 'Drug interactions and allergies', body: 'While we ask about allergies and medications in your profile, our system cannot guarantee it will identify every potential interaction. Never rely solely on Nouriwell to screen for drug-herb or drug-supplement interactions.' },
-      { heading: 'Emergencies', body: 'Nouriwell is not designed for medical emergencies. If you are experiencing a medical emergency, call your local emergency number immediately.' },
-      { heading: 'No doctor-patient relationship', body: 'Using Nouriwell does not create a doctor-patient or provider-patient relationship between you and Nouriwell or any of its team members.' },
-    ],
-  },
-  {
-    id: 'refund',
-    title: 'Refund Policy',
-    lastUpdated: 'May 25, 2026',
-    content: [
-      { heading: 'Free plan', body: 'The Seed (free) plan requires no payment and has no refund implications.' },
-      { heading: 'Pro subscription refunds', body: 'Root Pro subscriptions are billed monthly. If you are unsatisfied with your Pro subscription, you may request a refund within 7 days of your initial purchase or most recent renewal. Contact us at hello@nouriwell.co with your account email and reason for the request.' },
-      { heading: 'How to cancel', body: 'You can cancel your Pro subscription at any time from your profile settings by clicking "Manage subscription." Cancellation takes effect at the end of your current billing period — you will retain Pro access until then.' },
-      { heading: 'Partial refunds', body: 'We do not offer prorated refunds for partial months. If you cancel mid-cycle, you keep access until the period ends but will not be charged again.' },
-      { heading: 'Chargebacks', body: 'If you have a billing issue, please contact us before initiating a chargeback with your bank. We are happy to resolve issues directly and promptly.' },
-      { heading: 'Processing time', body: 'Approved refunds are processed within 5–10 business days and will appear on your original payment method.' },
-    ],
-  },
+  { id: 'privacy', title: 'Privacy Policy', subtitle: 'Nouriwell Privacy Policy · Last updated: June 2026', content: <PrivacyContent /> },
+  { id: 'terms', title: 'Terms of Service', subtitle: 'Nouriwell Terms of Service · Last updated: June 2026', content: <TermsContent /> },
+  { id: 'medical', title: 'Medical Disclaimer', subtitle: 'Nouriwell Medical Disclaimer · Last updated: June 2026', content: <MedicalContent /> },
+  { id: 'refund', title: 'Refund Policy', subtitle: 'Nouriwell Refund Policy · Last updated: June 2026', content: <RefundContent /> },
 ]
 
 export default function Legal() {
-  const [openSection, setOpenSection] = useState<string | null>('privacy')
+  const [openSection, setOpenSection] = useState<string | null>(null)
 
-  function toggle(id: string) {
-    setOpenSection(openSection === id ? null : id)
-  }
+  const toggleSection = (s: string) => setOpenSection(openSection === s ? null : s)
+
+  const sectionHeader = (key: string, label: string, value: string) => (
+    <div
+      onClick={() => toggleSection(key)}
+      style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '16px 20px', cursor: 'pointer', background: openSection === key ? '#faf8f3' : '#fff' }}
+    >
+      <div>
+        <div style={{ fontSize: 13, fontWeight: 600, color: '#1a3328' }}>{label}</div>
+        <div style={{ fontSize: 12, color: '#8aad96', marginTop: 2 }}>{value}</div>
+      </div>
+      <div style={{ fontSize: 18, color: '#8aad96', transform: openSection === key ? 'rotate(180deg)' : 'none', transition: 'transform 0.2s' }}>↓</div>
+    </div>
+  )
 
   return (
     <div style={{ fontFamily: 'system-ui, sans-serif', background: '#faf8f3', minHeight: '100vh' }}>
@@ -100,53 +281,16 @@ export default function Legal() {
       {/* Sections */}
       <div style={{ maxWidth: 720, margin: '0 auto', padding: '48px 24px 64px' }}>
         <div style={{ background: '#fff', border: '0.5px solid #e0d8c8', borderRadius: 16, overflow: 'hidden' }}>
-          {SECTIONS.map((section, i) => {
-            const isOpen = openSection === section.id
-            return (
-              <div key={section.id} style={{ borderBottom: i < SECTIONS.length - 1 ? '0.5px solid #e0d8c8' : 'none' }}>
-                <button
-                  onClick={() => toggle(section.id)}
-                  style={{
-                    width: '100%',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'space-between',
-                    padding: '18px 20px',
-                    background: isOpen ? '#faf8f3' : '#fff',
-                    border: 'none',
-                    cursor: 'pointer',
-                    fontFamily: 'inherit',
-                    textAlign: 'left',
-                  }}
-                >
-                  <div>
-                    <div style={{ fontSize: 15, fontWeight: 500, color: '#1a3328' }}>{section.title}</div>
-                    <div style={{ fontSize: 11, color: '#8aad96', marginTop: 2 }}>Last updated {section.lastUpdated}</div>
-                  </div>
-                  <svg
-                    width="18"
-                    height="18"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    style={{ flexShrink: 0, transform: isOpen ? 'rotate(180deg)' : 'rotate(0deg)', transition: 'transform 0.2s' }}
-                  >
-                    <path d="M6 9l6 6 6-6" stroke="#5a7a6a" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                  </svg>
-                </button>
-
-                {isOpen && (
-                  <div style={{ padding: '20px 20px 24px', borderTop: '0.5px solid #e0d8c8', background: '#faf8f3' }}>
-                    {section.content.map(block => (
-                      <div key={block.heading} style={{ marginBottom: 20 }}>
-                        <h3 style={{ fontSize: 13, fontWeight: 600, color: '#2a5c45', marginBottom: 6, letterSpacing: '0.02em' }}>{block.heading}</h3>
-                        <p style={{ fontSize: 14, color: '#5a7a6a', lineHeight: 1.7, margin: 0 }}>{block.body}</p>
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </div>
-            )
-          })}
+          {SECTIONS.map((section, i) => (
+            <div key={section.id} style={{ borderBottom: i < SECTIONS.length - 1 ? '0.5px solid #e0d8c8' : 'none' }}>
+              {sectionHeader(section.id, section.title, section.subtitle)}
+              {openSection === section.id && (
+                <div style={{ padding: '16px 20px', borderTop: '0.5px solid #f0ede8', background: '#faf8f3' }}>
+                  {section.content}
+                </div>
+              )}
+            </div>
+          ))}
         </div>
 
         <p style={{ fontSize: 13, color: '#8aad96', textAlign: 'center', marginTop: 32 }}>
