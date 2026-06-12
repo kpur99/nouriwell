@@ -233,6 +233,7 @@ export default function Home() {
         </div>
         <span style={{ fontSize: 15, fontWeight: 500, color: '#fff' }}>Nouri<span style={{ color: '#7dc9a3' }}>well</span></span>
         <Link href="/contact" style={{ color: '#8aad96', textDecoration: 'none', fontSize: 14 }}>Contact</Link>
+        <Link href="/legal" style={{ color: '#8aad96', textDecoration: 'none', fontSize: 14 }}>Legal</Link>
         <span style={{ fontSize: 12, color: '#4a6a5a', marginLeft: isMobile ? 0 : 'auto', width: isMobile ? '100%' : 'auto' }}>Holistic health, naturally guided · © 2026 · Not medical advice · Always consult a healthcare provider</span>
       </div>
 
