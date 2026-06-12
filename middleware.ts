@@ -35,7 +35,31 @@ export async function middleware(request: NextRequest) {
     }
 
     if ((request.nextUrl.pathname === '/login' || request.nextUrl.pathname === '/signup') && user) {
+      // Check if user has completed onboarding
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('name')
+        .eq('id', user.id)
+        .single()
+
+      if (!profile?.name) {
+        return NextResponse.redirect(new URL('/onboarding', request.url))
+      }
+
       return NextResponse.redirect(new URL('/dashboard', request.url))
+    }
+
+    // If logged in user hits a protected route, check if they have a profile
+    if (isProtected && user && request.nextUrl.pathname !== '/onboarding') {
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('name')
+        .eq('id', user.id)
+        .single()
+
+      if (!profile?.name) {
+        return NextResponse.redirect(new URL('/onboarding', request.url))
+      }
     }
 
   } catch {
@@ -46,5 +70,5 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/dashboard/:path*', '/remedy-finder/:path*', '/tracker/:path*', '/cycle/:path*', '/recipes/:path*', '/encyclopedia/:path*', '/library/:path*', '/login', '/signup', '/onboarding/:path*'],
+  matcher: ['/dashboard/:path*', '/remedy-finder/:path*', '/tracker/:path*', '/cycle/:path*', '/recipes/:path*', '/encyclopedia/:path*', '/library/:path*', '/login', '/signup', '/onboarding/:path*', '/profile/:path*'],
 }
