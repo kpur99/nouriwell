@@ -25,6 +25,7 @@ interface Remedy {
   name: string
   type: string
   how: string
+  source?: string
 }
 
 interface Results {
@@ -306,6 +307,11 @@ export default function RemedyFinder() {
                       <div style={{ fontSize: 12, fontWeight: 500, color: '#fff', marginBottom: 3 }}>{r.name}</div>
                       <span style={{ fontSize: 10, display: 'inline-block', padding: '2px 6px', borderRadius: 6, marginBottom: 5, background: typeStyle[r.type]?.bg || 'rgba(232,240,234,0.2)', color: typeStyle[r.type]?.color || '#a8d4be' }}>{r.type}</span>
                       <div style={{ fontSize: 11, color: '#a8d4be', lineHeight: 1.5 }}>{r.how}</div>
+                      {isPro && r.source && (
+                        <div style={{ fontSize: 10, color: '#7dc9a3', marginTop: 6, paddingTop: 6, borderTop: '0.5px solid rgba(255,255,255,0.1)' }}>
+                          📚 {r.source}
+                        </div>
+                      )}
                     </div>
                   ))}
                 </div>

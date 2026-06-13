@@ -94,16 +94,17 @@ export async function POST(req: NextRequest) {
         The user has the following profile: ${JSON.stringify(userProfile)}. 
         They are experiencing: ${symptom}
         
-        Provide 4-6 specific holistic remedies. For each remedy include exact dosages and usage instructions.
+        Provide 4-6 specific holistic remedies. For each remedy include exact dosages, usage instructions, and a brief source citation.
         
         Respond ONLY with valid JSON, no markdown, no backticks:
         {
           "intro": "2-3 sentence personalized intro based on their profile",
           "remedies": [
             {
-              "name": "specific remedy name",
+              "name": "remedy name",
               "type": "essential oil|herb|supplement|food|practice",
-              "how": "exact usage instructions with dosage"
+              "how": "usage instructions",
+              "source": "brief source citation or research reference, e.g. 'Dr. Bryan Ardis nicotinic receptor research' or 'PubMed study on magnesium and sleep' or 'traditional Ayurvedic medicine'"
             }
           ]
         }`
