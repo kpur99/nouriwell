@@ -40,9 +40,17 @@ Respond ONLY with valid JSON, no markdown, no backticks:
   "safe_for": ["adults", "pregnant women etc"],
   "not_safe_for": ["condition or group to avoid"],
   ${proContent}
-  "related": ["related herb/supplement 1", "related 2", "related 3"]
+  "related": ["related herb/supplement 1", "related 2", "related 3"],
+  "resources": [
+    {
+      "title": "resource title",
+      "type": "article|book|video|podcast|study",
+      "description": "brief description of what this resource covers",
+      "url": "url if available, otherwise null"
+    }
+  ]
 }
-Return 4-5 primary uses. Be accurate and evidence-based.`
+Return 4-5 primary uses. Include 4-6 high-quality resources (real books, studies, articles, podcasts, or videos when possible). Be accurate and evidence-based.`
       }]
     })
 

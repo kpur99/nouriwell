@@ -12,6 +12,13 @@ const BROWSE = [
   { category: 'Practices', items: ['Meditation', 'Dry brushing', 'Oil pulling', 'Earthing', 'Cold therapy', 'Breathwork', 'Tongue scraping', 'Castor oil packs'] },
 ]
 
+interface EncyclopediaResource {
+  title: string
+  type: string
+  description: string
+  url: string | null
+}
+
 interface EncyclopediaEntry {
   name: string
   also_known_as: string[]
@@ -29,6 +36,7 @@ interface EncyclopediaEntry {
   interactions?: string[]
   best_brands?: string[]
   related: string[]
+  resources?: EncyclopediaResource[]
 }
 
 export default function Encyclopedia() {
@@ -68,6 +76,15 @@ export default function Encyclopedia() {
   }
 
   const evidenceColor = (e: string) => e === 'strong' ? 'bg-[#E1F5EE] text-[#085041]' : e === 'moderate' ? 'bg-[#FAEEDA] text-[#633806]' : 'bg-[#f4faf7] text-[#7aaa94]'
+
+  const resourceTypeColor = (t: string) => {
+    const type = t.toLowerCase()
+    if (type === 'book') return 'bg-[#EEEDFE] text-[#3C3489]'
+    if (type === 'video') return 'bg-[#FAECE7] text-[#712B13]'
+    if (type === 'podcast') return 'bg-[#FAEEDA] text-[#633806]'
+    if (type === 'study') return 'bg-[#E1F5EE] text-[#085041]'
+    return 'bg-[#f4faf7] text-[#4a6b5e]'
+  }
 
   return (
     <div style={{ fontFamily: 'system-ui, sans-serif', background: '#faf8f3', minHeight: '100vh' }}>
@@ -216,6 +233,52 @@ export default function Encyclopedia() {
                     </button>
                   ))}
                 </div>
+              </div>
+            )}
+
+            {entry.resources && entry.resources.length > 0 && (
+              <div className="mt-8">
+                <p className="text-xs font-medium text-[#7aaa94] uppercase tracking-widest mb-4">Resources</p>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {(isPro ? entry.resources : entry.resources.slice(0, 2)).map((resource, i) => (
+                    <div key={i} className="bg-white border border-[#d4ede2] rounded-2xl p-5">
+                      <div className="flex items-start justify-between gap-3 mb-2">
+                        <h4 className="text-sm font-medium text-[#0a2e22] leading-snug">{resource.title}</h4>
+                        <span className={`text-xs px-2 py-0.5 rounded-full flex-shrink-0 ${resourceTypeColor(resource.type)}`}>{resource.type}</span>
+                      </div>
+                      <p className="text-sm text-[#4a6b5e] leading-relaxed mb-3">{resource.description}</p>
+                      {resource.url ? (
+                        <a
+                          href={resource.url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-sm text-[#1D9E75] font-medium no-underline hover:text-[#0F6E56]"
+                        >
+                          View resource →
+                        </a>
+                      ) : (
+                        <span className="text-xs text-[#7aaa94]">No link available</span>
+                      )}
+                    </div>
+                  ))}
+                </div>
+                {!isPro && entry.resources.length > 2 && (
+                  <div className="mt-4 bg-[#f4faf7] border border-[#d4ede2] rounded-2xl p-5 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                    <p className="text-sm text-[#4a6b5e]">
+                      Upgrade to Pro to see all {entry.resources.length} recommended resources for {entry.name}.
+                    </p>
+                    <button
+                      onClick={async () => {
+                        const res = await fetch('/api/checkout', { method: 'POST' })
+                        const data = await res.json()
+                        if (data.url) window.location.href = data.url
+                      }}
+                      className="px-5 py-2.5 bg-[#1D9E75] text-white rounded-xl border-none cursor-pointer text-sm font-medium hover:bg-[#0F6E56] whitespace-nowrap"
+                    >
+                      Upgrade for more resources
+                    </button>
+                  </div>
+                )}
               </div>
             )}
           </div>
