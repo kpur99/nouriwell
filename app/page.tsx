@@ -30,8 +30,12 @@ export default function Home() {
         </div>
         {!isMobile && (
           <div style={{ display: 'flex', gap: 4, marginLeft: 'auto', marginRight: 20 }}>
-            {['Features', 'How it works', 'Pricing'].map(n => (
-              <button key={n} style={{ fontSize: 14, color: '#5a7a6a', padding: '7px 16px', borderRadius: 20, cursor: 'pointer', background: 'none', border: 'none', fontFamily: 'inherit' }}>{n}</button>
+            {[
+              { label: 'Features', href: '#features' },
+              { label: 'How it works', href: '#how-it-works' },
+              { label: 'Pricing', href: '#pricing' },
+            ].map(({ label, href }) => (
+              <a key={href} href={href} style={{ fontSize: 14, color: '#5a7a6a', padding: '7px 16px', borderRadius: 20, cursor: 'pointer', background: 'none', border: 'none', fontFamily: 'inherit', textDecoration: 'none' }}>{label}</a>
             ))}
           </div>
         )}
@@ -125,7 +129,7 @@ export default function Home() {
       </div>
 
       {/* How it works */}
-      <div style={{ background: '#2a5c45', padding: isMobile ? '48px 20px' : '72px 48px', textAlign: 'center' }} id="how">
+      <div style={{ background: '#2a5c45', padding: isMobile ? '48px 20px' : '72px 48px', textAlign: 'center' }} id="how-it-works">
         <p style={{ fontSize: 12, color: '#7dc9a3', fontWeight: 600, letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 8 }}>How it works</p>
         <h2 style={{ fontSize: isMobile ? 28 : 36, fontWeight: 500, color: '#fff', marginBottom: 48, letterSpacing: '-0.3px' }}>Up and running in minutes</h2>
         <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : 'repeat(3, 1fr)', gap: isMobile ? 32 : 40 }}>
