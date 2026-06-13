@@ -6,7 +6,7 @@ import MedicalDisclaimer from '../components/MedicalDisclaimer'
 import { supabase, getUserAccess } from '../../lib/supabase'
 
 const GOALS = ['Reduce inflammation', 'Better sleep', 'More energy', 'Gut health', 'Hormonal balance', 'Immune support', 'Stress relief', 'Brain clarity']
-const DIETS = ['No restrictions', 'Plant-based', 'Gluten-free', 'Paleo / keto', 'Mediterranean']
+const DIETS = ['No restrictions', 'Plant-based', 'Gluten-free', 'Dairy-free', 'Paleo / keto', 'Mediterranean']
 
 interface Recipe {
   name: string
@@ -23,7 +23,7 @@ export default function Recipes() {
   const [profile, setProfile] = useState<{ name: string } | null>(null)
   const [isPro, setIsPro] = useState(true)
   const [goal, setGoal] = useState('')
-  const [diet, setDiet] = useState('No restrictions')
+  const [dietFilters, setDietFilters] = useState<string[]>([])
   const [ingredients, setIngredients] = useState('')
   const [loading, setLoading] = useState(false)
   const [recipes, setRecipes] = useState<Recipe[]>([])
@@ -42,6 +42,18 @@ export default function Recipes() {
     load()
   }, [])
 
+  function toggleDietFilter(d: string) {
+    setDietFilters(prev => {
+      if (d === 'No restrictions') {
+        return prev.includes('No restrictions') ? [] : ['No restrictions']
+      }
+      const withoutNone = prev.filter(x => x !== 'No restrictions')
+      return withoutNone.includes(d)
+        ? withoutNone.filter(x => x !== d)
+        : [...withoutNone, d]
+    })
+  }
+
   async function getRecipes() {
     if (!goal) return
     setLoading(true)
@@ -50,7 +62,7 @@ export default function Recipes() {
       const res = await fetch('/api/recipes', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ goal, diet, ingredients })
+        body: JSON.stringify({ goal, dietFilters, ingredients })
       })
       const data = await res.json()
       setRecipes(data.recipes || [])
@@ -129,17 +141,23 @@ export default function Recipes() {
             ))}
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-            <div>
-              <label className="text-xs text-[#7aaa94] mb-2 block">Diet preference</label>
-              <select className="w-full border border-[#d4ede2] rounded-xl px-4 py-3 text-sm font-sans text-[#0a2e22] focus:outline-none focus:border-[#1D9E75]" value={diet} onChange={e => setDiet(e.target.value)}>
-                {DIETS.map(d => <option key={d}>{d}</option>)}
-              </select>
+          <div className="mb-4">
+            <label className="text-xs text-[#7aaa94] mb-2 block">Dietary restrictions</label>
+            <div className="flex flex-wrap gap-2 mb-4">
+              {DIETS.map(d => (
+                <button
+                  key={d}
+                  type="button"
+                  onClick={() => toggleDietFilter(d)}
+                  className={`text-sm px-4 py-2 rounded-full cursor-pointer border transition-all ${dietFilters.includes(d) ? 'border-[#1D9E75] bg-[#E1F5EE] text-[#085041] font-medium' : 'border-[#d4ede2] bg-white text-[#4a6b5e]'}`}
+                >{d}</button>
+              ))}
             </div>
-            <div>
-              <label className="text-xs text-[#7aaa94] mb-2 block">Ingredients on hand (optional)</label>
-              <input className="w-full border border-[#d4ede2] rounded-xl px-4 py-3 text-sm font-sans text-[#0a2e22] focus:outline-none focus:border-[#1D9E75]" placeholder="e.g. turmeric, ginger, spinach..." value={ingredients} onChange={e => setIngredients(e.target.value)}/>
-            </div>
+          </div>
+
+          <div className="mb-4">
+            <label className="text-xs text-[#7aaa94] mb-2 block">Ingredients on hand (optional)</label>
+            <input className="w-full border border-[#d4ede2] rounded-xl px-4 py-3 text-sm font-sans text-[#0a2e22] focus:outline-none focus:border-[#1D9E75]" placeholder="e.g. turmeric, ginger, spinach..." value={ingredients} onChange={e => setIngredients(e.target.value)}/>
           </div>
 
           <button
