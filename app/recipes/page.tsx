@@ -24,6 +24,7 @@ export default function Recipes() {
   const [isPro, setIsPro] = useState(true)
   const [goal, setGoal] = useState('')
   const [dietFilters, setDietFilters] = useState<string[]>([])
+  const [customRequest, setCustomRequest] = useState('')
   const [ingredients, setIngredients] = useState('')
   const [loading, setLoading] = useState(false)
   const [recipes, setRecipes] = useState<Recipe[]>([])
@@ -62,7 +63,7 @@ export default function Recipes() {
       const res = await fetch('/api/recipes', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ goal, dietFilters, ingredients })
+        body: JSON.stringify({ goal, dietFilters, customRequest, ingredients })
       })
       const data = await res.json()
       setRecipes(data.recipes || [])
@@ -153,6 +154,12 @@ export default function Recipes() {
                 >{d}</button>
               ))}
             </div>
+            <textarea
+              value={customRequest}
+              onChange={e => setCustomRequest(e.target.value)}
+              placeholder="Any additional requests? e.g. 'high protein', 'under 30 minutes', 'uses ingredients I already have like chicken and spinach'..."
+              style={{ width: '100%', border: '1.5px solid #e0d8c8', borderRadius: 12, padding: '12px 14px', fontSize: 13, fontFamily: 'inherit', color: '#1a3328', resize: 'none', minHeight: 72, background: '#fff', outline: 'none', marginTop: 12 }}
+            />
           </div>
 
           <div className="mb-4">

@@ -5,7 +5,7 @@ const client = new Anthropic()
 
 export async function POST(req: NextRequest) {
   try {
-    const { goal, dietFilters, ingredients } = await req.json()
+    const { goal, dietFilters, customRequest, ingredients } = await req.json()
     const dietText = Array.isArray(dietFilters) && dietFilters.length > 0
       ? dietFilters.join(', ')
       : 'No restrictions'
@@ -18,6 +18,7 @@ export async function POST(req: NextRequest) {
         content: `You are a holistic nutritionist specializing in healing foods and anti-inflammatory cooking.
 Health goal: ${goal}
 Dietary restrictions: ${dietText}
+Additional requests: ${customRequest || 'none'}
 Available ingredients: ${ingredients || 'anything'}
 
 Respond ONLY with valid JSON, no markdown, no backticks:
