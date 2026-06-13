@@ -85,6 +85,13 @@ export default function Dashboard() {
       desc: 'Anti-inflammatory meals built around your goals'
     },
     {
+      href: '/alternatives',
+      icon: <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M7 16V8M7 8L4 11M7 8L10 11" stroke="#a8d4be" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/><path d="M17 8v8M17 16L14 13M17 16L20 13" stroke="#a8d4be" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>,
+      iconBg: 'rgba(255,255,255,0.1)',
+      title: 'Natural Alternatives',
+      desc: 'Swap conventional treatments for holistic options'
+    },
+    {
       href: '/library',
       icon: <svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M4 19V6a2 2 0 012-2h14v13" stroke="#a8d4be" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/><path d="M4 19a2 2 0 002 2h14" stroke="#a8d4be" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/><path d="M4 19a2 2 0 012-2h14" stroke="#a8d4be" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/><path d="M15 4v7l-2-1.5L11 11V4" stroke="#a8d4be" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/></svg>,
       iconBg: 'rgba(255,255,255,0.1)',
