@@ -11,21 +11,58 @@ interface Supplement {
   name: string
   dose: string
   frequency: string
-  time: string
+  brand?: string
+  times: string[]
   taken: boolean
   notes: string
+}
+
+const TIME_OPTIONS = ['Morning', 'Afternoon', 'Evening', 'Bedtime']
+
+const DEFAULT_SUPPLEMENTS: Supplement[] = [
+  { id: '1', name: 'Magnesium glycinate', dose: '300mg', frequency: 'daily', brand: 'Nature Made', times: ['Evening'], taken: false, notes: '' },
+  { id: '2', name: 'Vitamin D3', dose: '2000 IU', frequency: 'daily', brand: '', times: ['Morning'], taken: true, notes: '' },
+  { id: '3', name: 'Ashwagandha', dose: '600mg', frequency: 'daily', brand: 'Garden of Life', times: ['Morning'], taken: false, notes: '' },
+]
+
+const STORAGE_KEY = 'nouriwell-tracker-supplements'
+
+function migrateTime(time: string): string {
+  const map: Record<string, string> = {
+    morning: 'Morning',
+    afternoon: 'Afternoon',
+    evening: 'Evening',
+    'before bed': 'Bedtime',
+    bedtime: 'Bedtime',
+  }
+  return map[time.toLowerCase()] || time
+}
+
+function normalizeSupplement(s: Supplement & { time?: string }): Supplement {
+  const times = s.times?.length
+    ? s.times
+    : s.time
+      ? [migrateTime(s.time)]
+      : ['Morning']
+  return {
+    id: s.id,
+    name: s.name,
+    dose: s.dose,
+    frequency: s.frequency,
+    brand: s.brand || '',
+    times,
+    taken: s.taken,
+    notes: s.notes || '',
+  }
 }
 
 export default function Tracker() {
   const [profile, setProfile] = useState<{ name: string } | null>(null)
   const [isPro, setIsPro] = useState(false)
-  const [supplements, setSupplements] = useState<Supplement[]>([
-    { id: '1', name: 'Magnesium glycinate', dose: '300mg', frequency: 'daily', time: 'evening', taken: false, notes: '' },
-    { id: '2', name: 'Vitamin D3', dose: '2000 IU', frequency: 'daily', time: 'morning', taken: true, notes: '' },
-    { id: '3', name: 'Ashwagandha', dose: '600mg', frequency: 'daily', time: 'morning', taken: false, notes: '' },
-  ])
+  const [supplements, setSupplements] = useState<Supplement[]>(DEFAULT_SUPPLEMENTS)
+  const [storageLoaded, setStorageLoaded] = useState(false)
   const [showAdd, setShowAdd] = useState(false)
-  const [newSupp, setNewSupp] = useState({ name: '', dose: '', frequency: 'daily', time: 'morning' })
+  const [newSupp, setNewSupp] = useState({ name: '', dose: '', frequency: 'daily', brand: '', times: [] as string[] })
   const [checkLoading, setCheckLoading] = useState(false)
   const [checkResult, setCheckResult] = useState('')
 
@@ -42,14 +79,50 @@ export default function Tracker() {
     load()
   }, [])
 
+  useEffect(() => {
+    try {
+      const saved = localStorage.getItem(STORAGE_KEY)
+      if (saved) {
+        const parsed = JSON.parse(saved) as (Supplement & { time?: string })[]
+        setSupplements(parsed.map(normalizeSupplement))
+      }
+    } catch (e) {
+      console.error(e)
+    }
+    setStorageLoaded(true)
+  }, [])
+
+  useEffect(() => {
+    if (!storageLoaded) return
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(supplements))
+  }, [supplements, storageLoaded])
+
+  function toggleTime(time: string) {
+    setNewSupp(prev => ({
+      ...prev,
+      times: prev.times.includes(time)
+        ? prev.times.filter(t => t !== time)
+        : [...prev.times, time],
+    }))
+  }
+
   function toggleTaken(id: string) {
     setSupplements(s => s.map(x => x.id === id ? { ...x, taken: !x.taken } : x))
   }
 
   function addSupplement() {
-    if (!newSupp.name) return
-    setSupplements(s => [...s, { ...newSupp, id: Date.now().toString(), taken: false, notes: '' }])
-    setNewSupp({ name: '', dose: '', frequency: 'daily', time: 'morning' })
+    if (!newSupp.name || newSupp.times.length === 0) return
+    setSupplements(s => [...s, {
+      name: newSupp.name,
+      dose: newSupp.dose,
+      frequency: newSupp.frequency,
+      brand: newSupp.brand || undefined,
+      times: newSupp.times,
+      id: Date.now().toString(),
+      taken: false,
+      notes: '',
+    }])
+    setNewSupp({ name: '', dose: '', frequency: 'daily', brand: '', times: [] })
     setShowAdd(false)
   }
 
@@ -59,7 +132,11 @@ export default function Tracker() {
 
   async function checkInteractions() {
     setCheckLoading(true)
-    const list = supplements.map(s => `${s.name} ${s.dose}`).join(', ')
+    const list = supplements.map(s => {
+      const brand = s.brand ? ` (${s.brand})` : ''
+      const times = s.times.length ? ` at ${s.times.join(', ')}` : ''
+      return `${s.name}${brand} ${s.dose}${times}`
+    }).join(', ')
     const res = await fetch('/api/remedies', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -155,7 +232,11 @@ export default function Tracker() {
               </button>
               <div className="flex-1">
                 <p className={`text-base font-medium ${s.taken ? 'line-through text-[#7aaa94]' : 'text-[#0a2e22]'}`}>{s.name}</p>
-                <p className="text-sm text-[#7aaa94]">{s.dose} · {s.frequency} · {s.time}</p>
+                <p className="text-sm text-[#7aaa94]">
+                  {s.dose} · {s.frequency}
+                  {s.brand ? ` · ${s.brand}` : ''}
+                </p>
+                <p className="text-sm text-[#7aaa94]">{s.times.join(' · ')}</p>
               </div>
               <button onClick={() => removeSupp(s.id)} className="text-[#aac9b8] hover:text-red-400 bg-none border-none cursor-pointer text-lg">×</button>
             </div>
@@ -176,20 +257,36 @@ export default function Tracker() {
                 <input className="w-full border border-[#d4ede2] rounded-xl px-4 py-3 text-sm font-sans text-[#0a2e22] focus:outline-none focus:border-[#1D9E75]" placeholder="e.g. 600mg" value={newSupp.dose} onChange={e => setNewSupp(x => ({ ...x, dose: e.target.value }))}/>
               </div>
               <div>
+                <label className="text-xs text-[#7aaa94] mb-1 block">Brand (optional)</label>
+                <input className="w-full border border-[#d4ede2] rounded-xl px-4 py-3 text-sm font-sans text-[#0a2e22] focus:outline-none focus:border-[#1D9E75]" placeholder="e.g. Nature Made, Garden of Life" value={newSupp.brand} onChange={e => setNewSupp(x => ({ ...x, brand: e.target.value }))}/>
+              </div>
+              <div>
                 <label className="text-xs text-[#7aaa94] mb-1 block">Frequency</label>
                 <select className="w-full border border-[#d4ede2] rounded-xl px-4 py-3 text-sm font-sans text-[#0a2e22] focus:outline-none focus:border-[#1D9E75]" value={newSupp.frequency} onChange={e => setNewSupp(x => ({ ...x, frequency: e.target.value }))}>
                   <option>daily</option><option>twice daily</option><option>weekly</option><option>as needed</option>
                 </select>
               </div>
-              <div>
-                <label className="text-xs text-[#7aaa94] mb-1 block">Time of day</label>
-                <select className="w-full border border-[#d4ede2] rounded-xl px-4 py-3 text-sm font-sans text-[#0a2e22] focus:outline-none focus:border-[#1D9E75]" value={newSupp.time} onChange={e => setNewSupp(x => ({ ...x, time: e.target.value }))}>
-                  <option>morning</option><option>afternoon</option><option>evening</option><option>with food</option><option>before bed</option>
-                </select>
+            </div>
+            <div className="mb-4">
+              <label className="text-xs text-[#7aaa94] mb-2 block">Times of day</label>
+              <div className="flex flex-wrap gap-2">
+                {TIME_OPTIONS.map(time => (
+                  <button
+                    key={time}
+                    type="button"
+                    onClick={() => toggleTime(time)}
+                    className={`text-sm px-4 py-2 rounded-full cursor-pointer border transition-all ${newSupp.times.includes(time) ? 'border-[#1D9E75] bg-[#E1F5EE] text-[#085041] font-medium' : 'border-[#d4ede2] bg-white text-[#4a6b5e]'}`}
+                  >
+                    {time}
+                  </button>
+                ))}
               </div>
+              {newSupp.times.length === 0 && (
+                <p className="text-xs text-[#7aaa94] mt-2">Select at least one time of day</p>
+              )}
             </div>
             <div className="flex gap-3">
-              <button onClick={addSupplement} className="flex-1 py-3 bg-[#1D9E75] text-white rounded-xl border-none cursor-pointer font-medium hover:bg-[#0F6E56]">Add supplement</button>
+              <button onClick={addSupplement} disabled={!newSupp.name || newSupp.times.length === 0} className="flex-1 py-3 bg-[#1D9E75] text-white rounded-xl border-none cursor-pointer font-medium hover:bg-[#0F6E56] disabled:opacity-50 disabled:cursor-not-allowed">Add supplement</button>
               <button onClick={() => setShowAdd(false)} className="px-6 py-3 bg-[#f4faf7] text-[#4a6b5e] rounded-xl border border-[#d4ede2] cursor-pointer hover:border-[#1D9E75]">Cancel</button>
             </div>
           </div>
