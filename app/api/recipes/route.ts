@@ -5,10 +5,14 @@ const client = new Anthropic()
 
 export async function POST(req: NextRequest) {
   try {
-    const { goal, dietFilters, customRequest, ingredients } = await req.json()
+    const { goal, dietFilters, customRequest, ingredients, recipeCount = 3, existingRecipes = [] } = await req.json()
     const dietText = Array.isArray(dietFilters) && dietFilters.length > 0
       ? dietFilters.join(', ')
       : 'No restrictions'
+    const count = Math.min(Math.max(Number(recipeCount) || 3, 1), 6)
+    const existingText = Array.isArray(existingRecipes) && existingRecipes.length > 0
+      ? `\nDo not repeat these recipes already shown: ${existingRecipes.join(', ')}. Generate ${count} completely different recipes.`
+      : ''
 
     const response = await client.messages.create({
       model: 'claude-sonnet-4-5',
@@ -19,7 +23,7 @@ export async function POST(req: NextRequest) {
 Health goal: ${goal}
 Dietary restrictions: ${dietText}
 Additional requests: ${customRequest || 'none'}
-Available ingredients: ${ingredients || 'anything'}
+Available ingredients: ${ingredients || 'anything'}${existingText}
 
 Respond ONLY with valid JSON, no markdown, no backticks:
 {
@@ -38,7 +42,7 @@ Respond ONLY with valid JSON, no markdown, no backticks:
     }
   ]
 }
-Return 3 recipes. Be very specific with ingredients and amounts. Each recipe should have 5-8 ingredients.`
+Return ${count} recipes. Be very specific with ingredients and amounts. Each recipe should have 5-8 ingredients.`
       }]
     })
 

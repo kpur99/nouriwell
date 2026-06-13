@@ -1,5 +1,5 @@
 'use client'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
 import Sidebar from '../components/Sidebar'
 import MedicalDisclaimer from '../components/MedicalDisclaimer'
@@ -27,8 +27,11 @@ export default function Recipes() {
   const [customRequest, setCustomRequest] = useState('')
   const [ingredients, setIngredients] = useState('')
   const [loading, setLoading] = useState(false)
+  const [loadingMore, setLoadingMore] = useState(false)
   const [recipes, setRecipes] = useState<Recipe[]>([])
+  const [recipeCount, setRecipeCount] = useState(3)
   const [expanded, setExpanded] = useState<number | null>(null)
+  const prevRecipeCountRef = useRef(3)
 
   useEffect(() => {
     async function load() {
@@ -59,17 +62,46 @@ export default function Recipes() {
     if (!goal) return
     setLoading(true)
     setRecipes([])
+    setRecipeCount(3)
+    prevRecipeCountRef.current = 3
     try {
       const res = await fetch('/api/recipes', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ goal, dietFilters, customRequest, ingredients })
+        body: JSON.stringify({ goal, dietFilters, customRequest, ingredients, recipeCount: 3 })
       })
       const data = await res.json()
       setRecipes(data.recipes || [])
     } catch (e) { console.error(e) }
     setLoading(false)
   }
+
+  useEffect(() => {
+    async function fetchMore() {
+      if (recipeCount <= prevRecipeCountRef.current || recipes.length === 0) return
+      const additional = recipeCount - prevRecipeCountRef.current
+      prevRecipeCountRef.current = recipeCount
+      setLoadingMore(true)
+      try {
+        const res = await fetch('/api/recipes', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            goal,
+            dietFilters,
+            customRequest,
+            ingredients,
+            recipeCount: additional,
+            existingRecipes: recipes.map(r => r.name),
+          })
+        })
+        const data = await res.json()
+        setRecipes(prev => [...prev, ...(data.recipes || [])])
+      } catch (e) { console.error(e) }
+      setLoadingMore(false)
+    }
+    fetchMore()
+  }, [recipeCount])
 
   const difficultyColor = (d: string) => d === 'easy' ? 'bg-[#E1F5EE] text-[#085041]' : d === 'medium' ? 'bg-[#FAEEDA] text-[#633806]' : 'bg-[#FAECE7] text-[#712B13]'
 
@@ -228,6 +260,13 @@ export default function Recipes() {
                 )}
               </div>
             ))}
+            <button
+              onClick={() => setRecipeCount(c => c + 3)}
+              disabled={loadingMore}
+              style={{ width: '100%', background: '#fff', border: '1.5px solid #e0d8c8', borderRadius: 12, padding: '14px', fontSize: 14, fontWeight: 500, color: '#2a5c45', cursor: loadingMore ? 'not-allowed' : 'pointer', fontFamily: 'inherit', marginTop: 16, opacity: loadingMore ? 0.7 : 1 }}
+            >
+              {loadingMore ? 'Loading more recipes...' : 'Show more recipes →'}
+            </button>
           </div>
         )}
       </div>
