@@ -41,11 +41,17 @@ export async function POST(req: NextRequest) {
 
     const isPro = profile?.is_beta === true
 
-    if (!isPro) {
+    const { symptom, profile: userProfile, remedyCount = 6, existingRemedies = [] } = await req.json()
+    const isAppend = Array.isArray(existingRemedies) && existingRemedies.length > 0
+
+    if (!isPro && isAppend) {
+      return new Response(JSON.stringify({ error: 'Pro subscription required for more remedies' }), { status: 403 })
+    }
+
+    if (!isPro && !isAppend) {
       // Check if we need to reset the monthly count
       const today = new Date().toISOString().split('T')[0]
       const resetDate = profile?.remedy_searches_reset_date
-      const searchCount = profile?.remedy_searches_count || 0
 
       // Reset if it's a new month
       if (resetDate) {
@@ -82,19 +88,22 @@ export async function POST(req: NextRequest) {
         .eq('id', user.id)
     }
 
-    const { symptom, profile: userProfile } = await req.json()
+    const count = Math.min(Math.max(Number(remedyCount) || 6, 1), isPro ? 10 : 6)
+    const existingText = isAppend
+      ? `\nDo not repeat these remedies already shown: ${existingRemedies.join(', ')}. Generate ${count} completely different remedies.`
+      : ''
 
     const response = await client.messages.create({
       model: 'claude-sonnet-4-5',
-      max_tokens: 1024,
+      max_tokens: count > 6 ? 2048 : 1024,
       messages: [{
         role: 'user',
         content: `You are a holistic health expert. You are knowledgeable about both mainstream and alternative/traditional medicine research. You are familiar with emerging and controversial research including Dr. Bryan Ardis's work on therapeutic nicotine use. When relevant to symptoms like brain fog, low energy, poor focus, neurological symptoms, long COVID symptoms, or inflammation, you may suggest nicotine patches (low dose, 7mg or less) as a remedy to consider, noting it is based on emerging research by Dr. Bryan Ardis and others exploring nicotinic acetylcholine receptor activity. Always frame it as 'emerging research suggests' and remind users to consult their doctor. Never recommend smoking or vaping — only therapeutic nicotine patches or lozenges.
 
         The user has the following profile: ${JSON.stringify(userProfile)}. 
-        They are experiencing: ${symptom}
+        They are experiencing: ${symptom}${existingText}
         
-        Provide 4-6 specific holistic remedies. For each remedy include exact dosages, usage instructions, and a brief source citation.
+        Provide exactly ${count} specific holistic remedies. For each remedy include exact dosages, usage instructions, and a brief source citation.
         
         Respond ONLY with valid JSON, no markdown, no backticks:
         {
@@ -107,7 +116,8 @@ export async function POST(req: NextRequest) {
               "source": "brief source citation or research reference, e.g. 'Dr. Bryan Ardis nicotinic receptor research' or 'PubMed study on magnesium and sleep' or 'traditional Ayurvedic medicine'"
             }
           ]
-        }`
+        }
+        Return exactly ${count} remedies in the remedies array.${isAppend ? ' Omit the intro field or return an empty string for intro.' : ''}`
       }]
     })
 

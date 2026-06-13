@@ -1,5 +1,5 @@
 'use client'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import Link from 'next/link'
 import { supabase } from '../../lib/supabase'
 import Sidebar from '../components/Sidebar'
@@ -79,8 +79,12 @@ export default function RemedyFinder() {
   const [symptom, setSymptom] = useState('')
   const [severity, setSeverity] = useState('moderate')
   const [loading, setLoading] = useState(false)
+  const [loadingMore, setLoadingMore] = useState(false)
   const [results, setResults] = useState<Results | null>(null)
   const [error, setError] = useState('')
+  const [remedyCount, setRemedyCount] = useState(6)
+  const prevRemedyCountRef = useRef(6)
+  const lastQueryRef = useRef('')
 
   useEffect(() => {
     async function load() {
@@ -107,14 +111,18 @@ export default function RemedyFinder() {
       ? selected.join(', ') + (symptom ? '. ' + symptom : '')
       : symptom
     if (!query.trim()) return
+    const symptomPayload = query + '. Severity: ' + severity
+    lastQueryRef.current = symptomPayload
     setLoading(true)
     setResults(null)
     setError('')
+    setRemedyCount(6)
+    prevRemedyCountRef.current = 6
     try {
       const res = await fetch('/api/remedies', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ symptom: query + '. Severity: ' + severity, profile: profile || {} })
+        body: JSON.stringify({ symptom: symptomPayload, profile: profile || {}, remedyCount: 6 })
       })
       const data = await res.json()
       if (data.error === 'limit_reached') {
@@ -130,6 +138,35 @@ export default function RemedyFinder() {
     }
     setLoading(false)
   }
+
+  useEffect(() => {
+    async function fetchMore() {
+      if (remedyCount <= prevRemedyCountRef.current || !results) return
+      const additional = remedyCount - prevRemedyCountRef.current
+      prevRemedyCountRef.current = remedyCount
+      setLoadingMore(true)
+      try {
+        const res = await fetch('/api/remedies', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            symptom: lastQueryRef.current,
+            profile: profile || {},
+            remedyCount: additional,
+            existingRemedies: results.remedies.map(r => r.name),
+          })
+        })
+        const data = await res.json()
+        if (!data.error && data.remedies?.length) {
+          setResults(prev => prev ? { ...prev, remedies: [...prev.remedies, ...data.remedies] } : prev)
+        }
+      } catch {
+        // keep existing results on failure
+      }
+      setLoadingMore(false)
+    }
+    fetchMore()
+  }, [remedyCount])
 
   return (
     <div style={{ fontFamily: 'system-ui, sans-serif', background: '#faf8f3', minHeight: '100vh' }}>
@@ -315,6 +352,32 @@ export default function RemedyFinder() {
                     </div>
                   ))}
                 </div>
+                {isPro ? (
+                  <button
+                    onClick={() => setRemedyCount(c => c + 4)}
+                    disabled={loadingMore}
+                    style={{ width: '100%', background: '#fff', border: '1.5px solid #e0d8c8', borderRadius: 12, padding: '14px', fontSize: 14, fontWeight: 500, color: '#2a5c45', cursor: loadingMore ? 'not-allowed' : 'pointer', fontFamily: 'inherit', marginTop: 16, opacity: loadingMore ? 0.7 : 1 }}
+                  >
+                    {loadingMore ? 'Loading more remedies...' : 'Show more remedies →'}
+                  </button>
+                ) : (
+                  <div style={{ background: '#1e3d2e', borderRadius: 16, padding: 24, textAlign: 'center', marginTop: 16 }}>
+                    <h3 style={{ fontSize: 16, fontWeight: 500, color: '#fff', marginBottom: 8 }}>Want more remedies?</h3>
+                    <p style={{ fontSize: 13, color: '#a8d4be', lineHeight: 1.6, marginBottom: 16 }}>
+                      Upgrade to Pro for unlimited remedies per search, plus hormone balancing, healing recipes, and more.
+                    </p>
+                    <button
+                      onClick={async () => {
+                        const res = await fetch('/api/checkout', { method: 'POST' })
+                        const data = await res.json()
+                        if (data.url) window.location.href = data.url
+                      }}
+                      style={{ background: '#3d8c6a', color: '#fff', border: 'none', borderRadius: 12, padding: '12px 28px', fontSize: 14, fontWeight: 500, cursor: 'pointer', fontFamily: 'inherit' }}
+                    >
+                      Upgrade to Pro — $12/mo
+                    </button>
+                  </div>
+                )}
                 <MedicalDisclaimer style={{ marginTop: 16 }} />
               </>
             )}
