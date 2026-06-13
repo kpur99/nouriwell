@@ -202,7 +202,7 @@ export default function Home() {
             {
               name: 'Root', badge: 'Pro', badgeBg: '#ede8f5', badgeColor: '#4a3589',
               price: '$12', period: '/ month', featured: true,
-              features: ['Unlimited AI remedies', 'Hormone balancing', 'Healing recipes', 'Full encyclopedia', 'Resource library', 'Weekly AI check-ins'],
+              features: ['Unlimited AI remedies', 'Hormone balancing', 'Healing recipes', 'Full encyclopedia deep dives', 'Resource library', 'Natural alternatives'],
               cta: 'Start free trial', ctaBg: '#3d8c6a', ctaColor: '#fff', href: '/signup'
             },
           ].map(p => (
