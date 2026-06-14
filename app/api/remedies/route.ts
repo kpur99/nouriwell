@@ -119,6 +119,48 @@ export async function POST(req: NextRequest) {
         - Sorrel: fever, diuretic, thirst
         When recommending these herbs, note they are recognized by the National Library of Medicine.
 
+        Additional herbs and their healing properties to recommend when relevant:
+        - Ashwagandha: stress, cortisol, thyroid, adrenal fatigue, mood, stamina
+        - Turmeric: inflammation, depression, arthritis, cholesterol, cancer, digestive issues
+        - Echinacea: immune boost, colds, inflammation, skin problems
+        - Ginger Root: inflammation, digestion, nausea, pain, cholesterol, arthritis
+        - Ginkgo Biloba: brain fog, memory, dementia, anxiety, depression, ADHD, headaches
+        - Ginseng: stress, brain function, inflammation, blood sugar, immune system
+        - Valerian Root: sleep, anxiety, stress, blood pressure, menstrual cramps
+        - Milk Thistle: liver detox, cholesterol, diabetes, aging
+        - Maca Root: hormones, fertility, energy, stamina, libido
+        - Rhodiola: energy, stress, depression, cortisol, brain function, fat burning
+        - St. John's Wort: depression, anxiety, insomnia, ADHD, mood
+        - Licorice Root: acid reflux, cortisol, immunity, sore throat, PMS, menopause
+        - Holy Basil: anxiety, hypothyroidism, adrenal fatigue, acne, blood sugar
+        - Berberine: diabetes, cholesterol, heart disease, obesity, Alzheimer's, infections
+        - Black Cohosh: menopause, hot flashes, PCOS, uterine fibroids, bone loss
+        - Boswellia: inflammation, arthritis, immunity, healing, autoimmune
+        - Oregano Oil: bacterial infections, fungal infections, inflammation, allergies, cancer
+        - Skullcap: anxiety, insomnia, inflammation, muscle spasms, menstruation
+        - Passion Flower: anxiety, sleep, blood pressure, blood sugar, ADHD, menopause
+        - Lemon Balm: digestion, thyroid, PMS, sleep, mood, heart health
+        - Kava Root: anxiety, stress, insomnia, headaches, migraines
+        - Moringa: diabetes, anemia, allergies, arthritis, high blood pressure, low libido
+        - Fennel: digestion, gas, bloating, heartburn, respiratory, eye health, menopause
+        - Astragalus: immune system, cardiovascular, respiratory, wound healing, anti-aging
+        - Mullein: ear infections, bacteria, inflammation, respiratory mucus
+        - Slippery Elm: digestion, IBS, bloating, constipation, skin conditions, anxiety
+        - Marshmallow Root: stomach inflammation, dry cough, bacterial infections, joint pain
+        - Calendula: inflammation, wound healing, muscle spasms, oral health, antimicrobial
+        - Cat's Claw: arthritis, digestion, immunity, blood pressure, cancer
+        - Burdock Root: detox, circulation, lymphatic system, diabetes, skin conditions
+        - Goldenseal: digestion, immunity, mouth health, eye health, heart health, cancer
+        - Devil's Claw: arthritis, inflammation, pain relief, digestion, kidney health
+        - Vitex (Chasteberry): PMS, uterine fibroids, female fertility, endometriosis, menopause
+        - Red Clover: cardiovascular, menopause, bone health, eczema, psoriasis, cancer
+        - Feverfew: migraines, fevers, skin issues, arthritis, blood clots, infertility
+        - Wild Yam: blood sugar, cholesterol, diverticulosis, cancer
+        - Stinging Nettle: urinary issues, allergies, hay fever, joint pain, osteoarthritis, eczema
+        - Sarsaparilla: respiratory, skin, pain, libido, headaches, digestion, fever, infections
+        - Maca Root: hormones, fertility, energy, libido, stamina
+        When recommending these herbs always note they are from Dr. Axe's research and traditional herbal medicine. Always include proper usage instructions and note any warnings.
+
         The user has the following profile: ${JSON.stringify(userProfile)}. 
         They are experiencing: ${symptom}${existingText}
         
