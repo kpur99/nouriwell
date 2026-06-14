@@ -74,10 +74,10 @@ export async function POST(req: NextRequest) {
 
       const currentCount = freshProfile?.remedy_searches_count || 0
 
-      if (currentCount >= 3) {
+      if (currentCount >= 5) {
         return new Response(JSON.stringify({
           error: 'limit_reached',
-          message: 'You have used all 3 free remedy searches this month. Upgrade to Pro for unlimited searches.'
+          message: 'You have used all 5 free remedy searches this month. Upgrade to Pro for unlimited searches.'
         }), { status: 403 })
       }
 

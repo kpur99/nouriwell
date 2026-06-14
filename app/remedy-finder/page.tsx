@@ -297,7 +297,7 @@ export default function RemedyFinder() {
                 <div style={{ fontSize: 32, marginBottom: 12 }}>🌿</div>
                 <h3 style={{ fontSize: 18, fontWeight: 500, color: '#fff', marginBottom: 8 }}>Monthly limit reached</h3>
                 <p style={{ fontSize: 13, color: '#a8d4be', lineHeight: 1.6, marginBottom: 20 }}>
-                  You've used all 3 free remedy searches this month. Upgrade to Pro for unlimited searches, plus cycle syncing, healing recipes, and more.
+                  You've used all 5 free remedy searches this month. Upgrade to Pro for unlimited searches, plus cycle syncing, healing recipes, and more.
                 </p>
                 <button
                   onClick={async () => {
@@ -389,9 +389,9 @@ export default function RemedyFinder() {
               <div style={{ background: '#fff', border: '0.5px solid #e0d8c8', borderRadius: 14, padding: '14px 16px', marginBottom: 0 }}>
                 <div style={{ fontSize: 12, fontWeight: 600, color: '#1a3328', marginBottom: 8 }}>Free searches</div>
                 <div style={{ height: 6, background: '#e8f0ea', borderRadius: 10, overflow: 'hidden', marginBottom: 6 }}>
-                  <div style={{ height: 6, background: '#3d8c6a', borderRadius: 10, width: `${(searchCount / 3) * 100}%`, transition: 'width 0.3s' }} />
+                  <div style={{ height: 6, background: '#3d8c6a', borderRadius: 10, width: `${(searchCount / 5) * 100}%`, transition: 'width 0.3s' }} />
                 </div>
-                <div style={{ fontSize: 11, color: '#8aad96' }}>{searchCount} of 3 used this month</div>
+                <div style={{ fontSize: 11, color: '#8aad96' }}>{searchCount} of 5 used this month</div>
               </div>
             )}
             <div style={{ background: '#fff', border: '0.5px solid #e0d8c8', borderRadius: 14, overflow: 'hidden' }}>

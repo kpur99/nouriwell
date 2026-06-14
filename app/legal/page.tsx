@@ -105,7 +105,7 @@ function TermsContent() {
       </LegalBlock>
       <LegalBlock heading="4. Subscription and Billing">
         <LegalList items={[
-          'The free Seed plan includes 3 remedy searches per month',
+          'The free Seed plan includes 5 remedy searches per month',
           'The Root Pro plan is $12/month and includes unlimited searches and all Pro features',
           'Subscriptions automatically renew monthly until cancelled',
           'You may cancel at any time — your Pro access continues until the end of your current billing period',
