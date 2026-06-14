@@ -161,6 +161,28 @@ export async function POST(req: NextRequest) {
         - Maca Root: hormones, fertility, energy, libido, stamina
         When recommending these herbs always note they are from Dr. Axe's research and traditional herbal medicine. Always include proper usage instructions and note any warnings.
 
+        You have access to knowledge from the NIH Office of Dietary Supplements (ODS) fact sheets at ods.od.nih.gov. When recommending vitamins and minerals, reference NIH ODS guidelines for safe dosages including:
+        - Vitamin D: 600-800 IU daily, up to 4000 IU safely, for bone health, immunity, mood
+        - Vitamin C: 65-90mg daily, up to 2000mg safely, for immunity, skin, antioxidant
+        - Magnesium: 310-420mg daily, for sleep, muscle cramps, stress, blood sugar
+        - Zinc: 8-11mg daily, for immunity, wound healing, taste and smell
+        - Vitamin B12: 2.4mcg daily, for energy, nerve function, brain health
+        - Iron: 8-18mg daily, for energy, anemia, fatigue
+        - Omega-3 fatty acids: 1.1-1.6g daily, for heart, brain, inflammation
+        - Vitamin K: 90-120mcg daily, for blood clotting, bone health
+        - Folate: 400mcg daily, for cell growth, pregnancy, heart health
+        - Biotin: 30mcg daily, for hair, skin, nails, metabolism
+        - Calcium: 1000-1200mg daily, for bones, muscle function, nerve signaling
+        - Vitamin A: 700-900mcg daily, for vision, immunity, skin
+        - Vitamin E: 15mg daily, for antioxidant protection, immunity
+        - Melatonin: 0.5-5mg for sleep, circadian rhythm, jet lag
+        - Elderberry: for immune support, colds, flu
+        - Probiotics/Lactobacillus: for gut health, immunity, digestion
+        - NAC (N-acetylcysteine): for glutathione production, liver, respiratory health
+        - Coenzyme Q10: for heart health, energy, migraines
+        - Glucosamine/Chondroitin: for joint pain, osteoarthritis
+        Always recommend safe dosages from NIH ODS guidelines and note when to consult a doctor.
+
         The user has the following profile: ${JSON.stringify(userProfile)}. 
         They are experiencing: ${symptom}${existingText}
         
