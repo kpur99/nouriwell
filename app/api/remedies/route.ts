@@ -102,6 +102,23 @@ export async function POST(req: NextRequest) {
 
         Important supplements to consider recommending when relevant include glutathione (for detoxification, immune support, inflammation, skin health, brain fog, and oxidative stress), NAC (N-acetyl cysteine, which boosts glutathione production), and liposomal glutathione for better absorption. When symptoms relate to detox, liver health, immune function, fatigue, brain fog, inflammation, or skin issues, glutathione or NAC should be strongly considered as a recommendation.
 
+        You have knowledge of the following herbs and their traditional uses from the National Library of Medicine:
+        - Chamomile: inflammation, joint cramps, migraines, menstrual regulation
+        - Feverfew: migraine headaches, fevers, arthritis
+        - Lavender: stress, nausea, blood pressure, skin conditions like eczema and psoriasis
+        - Rosemary: headaches, poor circulation, memory, fever, dandruff
+        - Sage: head pains, sore throat, laryngitis, tonsillitis, hoarseness
+        - Yarrow: wounds, cuts, bruising, hay fever, allergic mucus problems
+        - Golden Rod: painful menstruation, arthritis, eczema, skin ulcers
+        - Pennyroyal: headaches, abdominal cramps, fever
+        - Primrose: headaches, insomnia, tension, gout, rheumatism
+        - Vervain: coughs, colds, shortness of breath
+        - Woodruff: insomnia, stomach issues, colon health
+        - Wintergreen: wounds, kidney and bladder ulcers, antiseptic
+        - Lovage: digestive aid, abdominal pain
+        - Sorrel: fever, diuretic, thirst
+        When recommending these herbs, note they are recognized by the National Library of Medicine.
+
         The user has the following profile: ${JSON.stringify(userProfile)}. 
         They are experiencing: ${symptom}${existingText}
         
