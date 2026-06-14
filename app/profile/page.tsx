@@ -17,9 +17,30 @@ interface Profile {
   is_beta: boolean
 }
 
+interface RemedySearch {
+  symptom: string
+  created_at: string
+}
+
+function timeAgo(dateStr: string) {
+  const seconds = Math.floor((Date.now() - new Date(dateStr).getTime()) / 1000)
+  if (seconds < 60) return 'just now'
+  const minutes = Math.floor(seconds / 60)
+  if (minutes < 60) return minutes === 1 ? '1 minute ago' : `${minutes} minutes ago`
+  const hours = Math.floor(minutes / 60)
+  if (hours < 24) return hours === 1 ? '1 hour ago' : `${hours} hours ago`
+  const days = Math.floor(hours / 24)
+  if (days < 30) return days === 1 ? '1 day ago' : `${days} days ago`
+  const months = Math.floor(days / 30)
+  if (months < 12) return months === 1 ? '1 month ago' : `${months} months ago`
+  const years = Math.floor(months / 12)
+  return years === 1 ? '1 year ago' : `${years} years ago`
+}
+
 export default function ProfilePage() {
   const router = useRouter()
   const [profile, setProfile] = useState<Profile | null>(null)
+  const [searches, setSearches] = useState<RemedySearch[]>([])
   const [isPro, setIsPro] = useState(true)
   const [email, setEmail] = useState('')
   const [saving, setSaving] = useState(false)
@@ -59,6 +80,15 @@ export default function ProfilePage() {
         setEditMedications(data.medications || [])
         setEditPregnant(data.pregnant || false)
       }
+
+      const { data: searchData } = await supabase
+        .from('remedy_searches')
+        .select('symptom, created_at')
+        .eq('user_id', user.id)
+        .order('created_at', { ascending: false })
+        .limit(10)
+      setSearches(searchData || [])
+
       const { isPro: proStatus } = await getUserAccess()
       setIsPro(proStatus)
     }
@@ -327,6 +357,35 @@ export default function ProfilePage() {
                 )}
               </div>
 
+            </div>
+
+            {/* Recent searches */}
+            <p style={{ fontSize: 12, fontWeight: 600, color: '#2a5c45', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: 12 }}>Recent searches</p>
+
+            <div style={{ background: '#fff', border: '0.5px solid #e0d8c8', borderRadius: 16, overflow: 'hidden', marginBottom: 24 }}>
+              {searches.length === 0 ? (
+                <div style={{ padding: '20px', textAlign: 'center' }}>
+                  <p style={{ fontSize: 13, color: '#8aad96', marginBottom: 12 }}>No remedy searches yet.</p>
+                  <Link href="/remedy-finder" style={{ fontSize: 13, color: '#3d8c6a', textDecoration: 'none', fontWeight: 500 }}>Find your first remedy →</Link>
+                </div>
+              ) : (
+                searches.map((search, i) => (
+                  <div
+                    key={`${search.created_at}-${i}`}
+                    style={{
+                      display: 'flex',
+                      alignItems: 'flex-start',
+                      justifyContent: 'space-between',
+                      gap: 16,
+                      padding: '16px 20px',
+                      borderBottom: i < searches.length - 1 ? '0.5px solid #e0d8c8' : 'none',
+                    }}
+                  >
+                    <p style={{ fontSize: 13, color: '#1a3328', lineHeight: 1.5, margin: 0, flex: 1 }}>{search.symptom}</p>
+                    <span style={{ fontSize: 12, color: '#8aad96', whiteSpace: 'nowrap', flexShrink: 0 }}>{timeAgo(search.created_at)}</span>
+                  </div>
+                ))
+              )}
             </div>
 
             {/* Account settings */}

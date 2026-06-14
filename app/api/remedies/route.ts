@@ -206,6 +206,13 @@ export async function POST(req: NextRequest) {
 
     const raw = response.content[0].type === 'text' ? response.content[0].text : ''
     const clean = raw.replace(/```json|```/g, '').trim()
+
+    if (!isAppend) {
+      await adminSupabase
+        .from('remedy_searches')
+        .insert({ user_id: user.id, symptom: symptom })
+    }
+
     return new Response(clean, { headers: { 'Content-Type': 'application/json' } })
   } catch (error) {
     return new Response(JSON.stringify({ error: String(error) }), { status: 500 })
