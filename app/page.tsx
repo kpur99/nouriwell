@@ -111,6 +111,7 @@ export default function Home() {
             { icon: <SupplementTrackerIcon size={22} color="#a8d4be" />, title: 'Supplement tracker', badge: 'Free', desc: 'Log your stack, track your streak, and check for interactions with AI.', href: '/tracker' },
             { icon: <CycleSyncingIcon size={22} color="#a8d4be" />, title: 'Hormone balancing', badge: 'Pro', desc: 'Phase-specific remedies, foods, and practices for every stage of hormone balancing.', href: '/cycle' },
             { icon: <HealingRecipesIcon size={22} color="#a8d4be" />, title: 'Healing recipes', badge: 'Pro', desc: 'Anti-inflammatory meals built around your health goals and diet preferences.', href: '/recipes' },
+            { icon: <svg viewBox="0 0 24 24" fill="none" width="22" height="22"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z" stroke="#a8d4be" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/><path d="M9 22V12h6v10" stroke="#a8d4be" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/></svg>, title: 'Natural Living', badge: 'Pro', desc: 'DIY natural recipes for sunscreen, cleaners, body care, and more.', href: '/natural-living' },
             { icon: <EncyclopediaIcon size={22} color="#a8d4be" />, title: 'Holistic encyclopedia', badge: 'Free + Pro', desc: 'Look up any supplement, herb, or oil for uses, dosage, and safety info.', href: '/encyclopedia' },
             { icon: <ResourceLibraryIcon size={22} color="#a8d4be" />, title: 'Resource library', badge: 'Pro', desc: 'Curated podcasts, books, and videos from holistic health experts we recommend.', href: '/library' },
           ].map(f => (
@@ -202,7 +203,7 @@ export default function Home() {
             {
               name: 'Root', badge: 'Pro', badgeBg: '#ede8f5', badgeColor: '#4a3589',
               price: '$12', period: '/ month', featured: true,
-              features: ['Unlimited AI remedies', 'Hormone balancing', 'Healing recipes', 'Full encyclopedia deep dives', 'Resource library', 'Natural alternatives'],
+              features: ['Unlimited AI remedies', 'Hormone balancing', 'Healing recipes', 'Full encyclopedia deep dives', 'Resource library', 'Natural alternatives', 'Natural Living'],
               cta: 'Start free trial', ctaBg: '#3d8c6a', ctaColor: '#fff', href: '/signup'
             },
           ].map(p => (

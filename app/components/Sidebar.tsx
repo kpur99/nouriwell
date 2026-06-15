@@ -25,6 +25,10 @@ const naturalAlternativesIcon = (
   <svg viewBox="0 0 24 24" fill="none" width="18" height="18"><path d="M7 16l4-4-4-4" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/><path d="M17 8l-4 4 4 4" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/></svg>
 )
 
+const naturalLivingIcon = (
+  <svg viewBox="0 0 24 24" fill="none" width="18" height="18"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/><path d="M9 22V12h6v10" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/></svg>
+)
+
 export default function Sidebar({ active, isPro = false }: SidebarProps) {
   const [mounted, setMounted] = useState(false)
   useEffect(() => setMounted(true), [])
@@ -99,6 +103,7 @@ export default function Sidebar({ active, isPro = false }: SidebarProps) {
           {item('Hormone balancing', '/cycle', hormoneBalancingIcon)}
           {item('Healing recipes', '/recipes', healingRecipesIcon)}
           {item('Natural Alternatives', '/alternatives', naturalAlternativesIcon)}
+          {item('Natural Living', '/natural-living', naturalLivingIcon)}
           {item('Resource library', '/library', resourceLibraryIcon)}
         </>
       ) : (
@@ -106,6 +111,7 @@ export default function Sidebar({ active, isPro = false }: SidebarProps) {
           {lockedItem('Hormone balancing', '/cycle', hormoneBalancingIcon)}
           {lockedItem('Healing recipes', '/recipes', healingRecipesIcon)}
           {lockedItem('Natural Alternatives', '/alternatives', naturalAlternativesIcon)}
+          {lockedItem('Natural Living', '/natural-living', naturalLivingIcon)}
           {lockedItem('Resource library', '/library', resourceLibraryIcon)}
         </>
       )}
